@@ -1,3 +1,3 @@
-#DataViva
-A Collaborative Planning Tool.
+#DataViva Scripts
+Helper scripts to put raw data into database.
 [dataviva.info](http://www.dataviva.info)

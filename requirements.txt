@@ -1,33 +1,22 @@
-# Flask framework
-Jinja2==2.6
-Werkzeug==0.8.3
-flask==0.9
-
-# Helper lib for running scripts locally without server
-Flask-Script
-
-# Make managing logged in users easier
-flask-login
-
-# Oauth helper for signing in users from facebook, twitter, google
-flask_oauth
-
-# Form helper
-flask-wtf
-
-# Localization
-flask-babel
-
-# DB libs for connecting to MySQL
-# WARNING: Must have MySQL server installed!
+# need to be able to connect to the DB
 MySQL-python
-sqlalchemy
-flask-sqlalchemy
 
-# Redis connector for caching/sessions 
-# WARNING: Must have Redis server installed!
-redis
-hiredis
+# ipython a WAY better interactive python shell
+# readline
+# ipython
 
-# Better JSON serializer that knows how to handle Decimal types
-simplejson
+# helpful library for advanced math / data manipulation similar to matlab
+# required for pandas
+numpy
+
+# charting library also similar to matlab
+matplotlib
+
+# scipy for calculations and regressions
+# required for pandas
+scipy
+scikits.statsmodels
+
+# Pandas library for doing matrix math, dataframes etc. similar to R
+pandas
+patsy

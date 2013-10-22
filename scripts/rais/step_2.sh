@@ -1,0 +1,10 @@
+python step_2_disaggregate.py -f 2002/ybio.tsv -y 2002
+python step_2_disaggregate.py -f 2003/ybio.tsv -y 2003
+python step_2_disaggregate.py -f 2004/ybio.tsv -y 2004
+python step_2_disaggregate.py -f 2005/ybio.tsv -y 2005
+python step_2_disaggregate.py -f 2006/ybio.tsv -y 2006
+python step_2_disaggregate.py -f 2007/ybio.tsv -y 2007
+python step_2_disaggregate.py -f 2008/ybio.tsv -y 2008
+python step_2_disaggregate.py -f 2009/ybio.tsv -y 2009
+python step_2_disaggregate.py -f 2010/ybio.tsv -y 2010
+python step_2_disaggregate.py -f 2011/ybio.tsv -y 2011
