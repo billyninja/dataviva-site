@@ -16,7 +16,7 @@
 """
 
 ''' Import statements '''
-import csv, sys, os, argparse, MySQLdb
+import csv, sys, os, argparse, MySQLdb, bz2, gzip, zipfile
 from collections import defaultdict
 from os import environ
 
@@ -79,6 +79,27 @@ def add(ybio, munic, isic, occ, wage, emp, est):
     
     return ybio
 
+def get_file(directory, year):
+    extensions = [
+        {'ext':'.csv.bz2', 'io':bz2.BZ2File},
+        {'ext':'.csv.gz', 'io':gzip.open},
+        {'ext':'.csv.zip', 'io':zipfile.ZipFile},
+        {'ext':'.csv', 'io':open}
+    ]
+    for e in extensions:
+        file_name = "Rais{0}{1}".format(year, e["ext"])
+        file_path = os.path.abspath(os.path.join(directory, file_name))
+        if os.path.exists(file_path):
+            file = e["io"](file_path)
+            if e["ext"] == '.csv.zip':
+                file = zipfile.ZipFile.open(file, "Rais{0}.csv".format(year))
+            print "Reading from file", file_path
+            return file
+        print "ERROR: unable to find file named Rais{0}.csv[.zip, .bz2, .gz] " \
+                "in directory specified.".format(year)
+        sys.exit()
+        
+
 def clean(directory, year):
     '''Initialize our data dictionaries'''
     ybio = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float))))
@@ -92,12 +113,11 @@ def clean(directory, year):
                     "wage":["AverageMonthlyWage", wage_format]}
     
     '''Open CSV file'''
-    file_name = "Rais{0}.csv".format(year)
-    file_path = os.path.abspath(os.path.join(directory, file_name))
-    
-    print "Reading from ", file_path
-    csv_reader = csv.reader(open(file_path, 'rU'), delimiter=",", quotechar='"')
+    file = get_file(directory, year)
+    csv_reader = csv.reader(file, delimiter=",", quotechar='"')
     header = [s.replace('\xef\xbb\xbf', '') for s in csv_reader.next()]
+    print header 
+    sys.exit()
     
     errors_dict = defaultdict(set)
     
