@@ -6,20 +6,18 @@
 """
 
 ''' Import statements '''
-import csv, sys, os, argparse, math, time
+import csv, sys, os, argparse, math, time, bz2
 from collections import defaultdict
 from os import environ
 import pandas as pd
 import numpy as np
+from ..helpers import get_file
+from ..config import DATA_DIR
+from ..growth_lib import growth
 
-growth_lib_dir = os.path.abspath('/Users/alexandersimoes/sites/visual_mg/scripts/growth_lib/')
-sys.path.append(growth_lib_dir)
-import growth
-
-def get_all_cbo(file_path, y):
-    yo_file_path = file_path.split("/")
-    yo_file_path[-1] = "yo.tsv"
-    yo_file_path = "/".join(yo_file_path)
+def get_all_cbo(y):
+    yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybo.tsv'))
+    yo_file_path = get_file(yo_file_path)
 
     yo = pd.read_csv(yo_file_path, sep="\t", converters={"cbo_id":str})
     yo = yo.set_index(["cbo_id"])
@@ -27,10 +25,9 @@ def get_all_cbo(file_path, y):
     
     return cbos
 
-def get_ybi_rcas(file_path, geo_level):
-    ybi_file_path = file_path.split("/")
-    ybi_file_path[-1] = "ybi.tsv"
-    ybi_file_path = "/".join(ybi_file_path)
+def get_ybi_rcas(geo_level):
+    ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
+    ybi_file_path = get_file(ybi_file_path)
     ybi = pd.read_csv(ybi_file_path, sep="\t")
     
     isic_criterion = ybi['isic_id'].map(lambda x: len(x) == 5)
@@ -47,22 +44,18 @@ def get_ybi_rcas(file_path, geo_level):
     
     return rcas
 
-def calculate_exclusivity(file_path, y):
+def calculate_exclusivity(y):
     start = time.time()
-    all_cbo = get_all_cbo(file_path, y)
+    all_cbo = get_all_cbo(y)
     
     '''get ybi RCAs'''
-    rcas = get_ybi_rcas(file_path, 8)
+    rcas = get_ybi_rcas(8)
     
     denoms = rcas.sum()
-    # print denoms
-    # sys.exit()
-    
     
     print "loading YBIO..."
-    ybio_file_path = file_path.split("/")
-    ybio_file_path[-1] = "ybio.tsv"
-    ybio_file_path = "/".join(ybio_file_path)
+    ybio_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio.tsv'))
+    ybio_file_path = get_file(ybio_file_path)
     
     ybio = pd.read_csv(ybio_file_path, sep="\t", converters={"year": str, "cbo_id":str})
     isic_criterion = ybio['isic_id'].map(lambda x: len(x) == 5)
@@ -115,29 +108,34 @@ def calculate_exclusivity(file_path, y):
     yio_importance = pd.DataFrame(yio_importance, columns=["year", "isic_id", "cbo_id", "importance"])
     yio_importance = yio_importance.set_index(["year", "isic_id", "cbo_id"])
     
-    yio = pd.read_csv(file_path, sep="\t", converters={"year": str, "cbo_id": str})
+    yio_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yio.tsv'))
+    yio_file_path = get_file(yio_file_path)
+    
+    yio = pd.read_csv(yio_file_path, sep="\t", converters={"year": str, "cbo_id": str})
     yio = yio.set_index(["year", "isic_id", "cbo_id"])
     yio["importance"] = yio_importance["importance"]
         
     # print out file
     print "writing to file..."
-    yio.to_csv("{0}/yio_importance.tsv".format(str(y)), sep="\t", index=True)
+    new_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yio_importance.tsv.bz2'))
+    yio.to_csv(bz2.BZ2File(new_file_path, 'wb'), sep="\t", index=True)
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help="year for calculations to be run")
-    parser.add_argument("-f", "--file", help="full path to CSV file")
-    args = parser.parse_args()
+    start = time.time()
     
-    file_path = args.file
-    if not file_path:
-        file_path = raw_input("Full path to CSV file: ")
+    # Get path of the file from the user
+    help_text_year = "the year of data being converted "
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-y", "--year", help=help_text_year)
+    args = parser.parse_args()
     
     year = args.year
     if not year:
-        year = raw_input("Year for calculations (or all): ")
+        year = raw_input(help_text_year)
     
-    print
-    print "Year: {0}".format(year);
-    calculate_exclusivity(file_path, year)
+    calculate_exclusivity(year)
+    
+    total_run_time = (time.time() - start) / 60
+    print; print;
+    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print; print;

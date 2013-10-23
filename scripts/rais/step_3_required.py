@@ -23,9 +23,6 @@ from ..config import DATA_DIR
 from ..growth_lib import growth
 
 def get_ybi_rcas(year, geo_level):
-    # ybi_file_path = file_path.split("/")
-    # ybi_file_path[-1] = "ybi.tsv"
-    # ybi_file_path = "/".join(ybi_file_path)
     ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
     ybi_file_path = get_file(ybi_file_path)
     ybi = pd.read_csv(ybi_file_path, sep="\t")
@@ -64,11 +61,11 @@ def required(year):
         bra_criterion = ybio_data['bra_id'].map(lambda x: len(x) == geo_level)
         ybio_panel = ybio_data[isic_criterion & cbo_criterion & bra_criterion]
         
-        ybio_panel["avg_num_emp"] = ybio_panel["num_emp"]/ybio_panel["num_est"]
+        # ybio_panel["avg_num_emp"] = ybio_panel["num_emp"]/ybio_panel["num_est"]
         ybio_panel = ybio_panel.drop(["num_est", "num_emp"], axis=1)
         ybio_panel = ybio_panel.pivot_table(rows=["bra_id", "cbo_id"], \
                                             cols="isic_id", \
-                                            values="avg_num_emp")
+                                            values="num_emp_est")
         
         ybio_panel = ybio_panel.to_panel()
         
