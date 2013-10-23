@@ -132,7 +132,6 @@ def get_file(directory, year):
             "in directory specified."
     sys.exit()
 
-
 def disaggregate(year):
     tables = {
         "yb": defaultdict(lambda: defaultdict(float)),

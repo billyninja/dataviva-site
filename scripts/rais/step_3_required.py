@@ -1,23 +1,33 @@
 # -*- coding: utf-8 -*-
 """
+    Caculate required numbers YBIO
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    The script is the third step in adding a new year of RAIS data to the 
+    database. The script will output 1 bzipped TSV files that can then be 
+    used throughout the rest of the steps.
+    
+    The year will needs to be specified by the user, the script will then
+    loop through each geographic location to calculation the "required"
+    number of employees for this YEAR-LOCATION-INDUSTRY-OCCUPATION combo.
 """
 
 ''' Import statements '''
-import csv, sys, os, argparse, math, time
+import csv, sys, os, argparse, math, time, bz2
 from collections import defaultdict
 from os import environ
 import pandas as pd
 import numpy as np
+from ..helpers import get_file
+from ..config import DATA_DIR
+from ..growth_lib import growth
 
-growth_lib_dir = os.path.abspath('/Users/alexandersimoes/sites/visual_mg/scripts/growth_lib/')
-sys.path.append(growth_lib_dir)
-import growth
-
-def get_ybi_rcas(file_path, geo_level):
-    ybi_file_path = file_path.split("/")
-    ybi_file_path[-1] = "ybi.tsv"
-    ybi_file_path = "/".join(ybi_file_path)
+def get_ybi_rcas(year, geo_level):
+    # ybi_file_path = file_path.split("/")
+    # ybi_file_path[-1] = "ybi.tsv"
+    # ybi_file_path = "/".join(ybi_file_path)
+    ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
+    ybi_file_path = get_file(ybi_file_path)
     ybi = pd.read_csv(ybi_file_path, sep="\t")
     
     isic_criterion = ybi['isic_id'].map(lambda x: len(x) == 5)
@@ -34,11 +44,13 @@ def get_ybi_rcas(file_path, geo_level):
     
     return rcas
 
-def required(file_path, year):
-    print file_path, year
+def required(year):
+    print year
     
     print "loading YBIO..."
-    ybio = pd.read_csv(file_path, sep="\t", converters={"year": int, "cbo_id":str})
+    file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio.tsv'))
+    file = get_file(file_path)
+    ybio = pd.read_csv(file, sep="\t", converters={"year": int, "cbo_id":str})
     
     ybio_data = ybio.drop(["year", "wage"], axis=1)
     
@@ -61,7 +73,7 @@ def required(file_path, year):
         ybio_panel = ybio_panel.to_panel()
         
         '''get ybi RCAs'''
-        ybi_rcas = get_ybi_rcas(file_path, geo_level)
+        ybi_rcas = get_ybi_rcas(year, geo_level)
         ybi_prox = growth.proximity(ybi_rcas.T)
         
         s = time.time()
@@ -112,22 +124,25 @@ def required(file_path, year):
         
     # print out file
     print "writing to file..."
-    ybio.to_csv("{0}/ybio_required.tsv".format(str(year)), sep="\t", index=False)
+    new_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio_required.tsv.bz2'))
+    ybio.to_csv(bz2.BZ2File(new_file_path, 'wb'), sep="\t", index=False)
 
 if __name__ == "__main__":
+    start = time.time()
     
     # Get path of the file from the user
+    help_text_year = "the year of data being converted "
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file", help="full path to CSV file")
-    parser.add_argument("-y", "--year", help="year")
+    parser.add_argument("-y", "--year", help=help_text_year)
     args = parser.parse_args()
-    
-    file_path = args.file
-    if not file_path:
-        file_path = raw_input("Full path to CSV file: ")
     
     year = args.year
     if not year:
-        year = raw_input("Year: ")
+        year = raw_input(help_text_year)
     
-    required(file_path, year)
+    required(year)
+    
+    total_run_time = (time.time() - start) / 60
+    print; print;
+    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print; print;

@@ -15,5 +15,5 @@ numpy
 # scikits.statsmodels
 
 # Pandas library for doing matrix math, dataframes etc. similar to R
-# pandas
+pandas
 # patsy
