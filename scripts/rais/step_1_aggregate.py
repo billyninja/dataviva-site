@@ -1,24 +1,30 @@
 # -*- coding: utf-8 -*-
 """
-    Clean raw RAIS data and output to CSV
+    Clean raw RAIS data and output to TSV
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The script is the first step in adding a new year of RAIS data to the 
-    database. The script will output x CSV files that can then be added to
-    the database by the add_to_db.py script.
+    database. The script will output 1 bzipped TSV file that can then be 
+    consumed by step 2 for created the disaggregate tables.
     
-    The user needs to specify the path to the file they are looking to use
-    as input.
+    Like many of the other scripts, the user needs to specify the path to the 
+    working directory they will be using that will contain the raw file using
+    the naming convention 'Rais[year].csv'. The file can be raw text or
+    compressed with bzip, gzip or zip.
     
+    Raw Text Columns - 
     0: Year; 1: Employee_ID; 2: Establishment_ID; 3: Municipality_ID;
     4: BrazilianOcupation_ID; 5: SBCLAS20; 6: CLASCNAE20; 7: WageReceived;
     8: EconomicActivity_ID_ISIC; 9: Average_monthly_wage
 """
 
 ''' Import statements '''
-import csv, sys, os, argparse, MySQLdb, bz2, gzip, zipfile
+import csv, sys, os, argparse, MySQLdb, time, bz2, gzip, zipfile
 from collections import defaultdict
 from os import environ
+from decimal import Decimal, ROUND_HALF_UP
+from ..config import DATA_DIR
+from ..helpers import d
 
 ''' Connect to DB '''
 db = MySQLdb.connect(host="localhost", user=environ["DATAVIVA_DB_USER"], 
@@ -31,6 +37,8 @@ def cbo_format(cbo_code, lookup):
     # take off last 2 digits
     cbo = cbo_code[:-2]
     if cbo in ['', 'NAO DESL A', 'IGNORA', '-94201', '0000']:
+        return "xxxx"
+    elif cbo[0] == '0':
         return "xxxx"
     else:
         return lookup[cbo]
@@ -70,16 +78,20 @@ def get_lookup(type):
         return {r[0]:r[1] for r in cursor.fetchall()}
 
 def add(ybio, munic, isic, occ, wage, emp, est):
-    ybio[munic][isic][occ]["wage"] += wage
+    ybio[munic][isic][occ]["wage"] += float(wage)
     ybio[munic][isic][occ]["num_emp"] += 1
+    ybio[munic][isic][occ]["wage_avg"] = ybio[munic][isic][occ]["wage"] / ybio[munic][isic][occ]["num_emp"]
+    
     try:
         ybio[munic][isic][occ]["num_est"].add(est)
     except AttributeError:
         ybio[munic][isic][occ]["num_est"] = set([est])
     
+    ybio[munic][isic][occ]["num_emp_est"] = ybio[munic][isic][occ]["num_emp"] / len(ybio[munic][isic][occ]["num_est"])
+    
     return ybio
 
-def get_file(directory, year):
+def get_file(year):
     extensions = [
         {'ext':'.csv.bz2', 'io':bz2.BZ2File},
         {'ext':'.csv.gz', 'io':gzip.open},
@@ -88,19 +100,18 @@ def get_file(directory, year):
     ]
     for e in extensions:
         file_name = "Rais{0}{1}".format(year, e["ext"])
-        file_path = os.path.abspath(os.path.join(directory, file_name))
+        file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', file_name))
         if os.path.exists(file_path):
             file = e["io"](file_path)
             if e["ext"] == '.csv.zip':
                 file = zipfile.ZipFile.open(file, "Rais{0}.csv".format(year))
             print "Reading from file", file_path
             return file
-        print "ERROR: unable to find file named Rais{0}.csv[.zip, .bz2, .gz] " \
-                "in directory specified.".format(year)
-        sys.exit()
-        
+    print "ERROR: unable to find file named Rais{0}.csv[.zip, .bz2, .gz] " \
+            "in directory specified.".format(year)
+    sys.exit()
 
-def clean(directory, year):
+def clean(year):
     '''Initialize our data dictionaries'''
     ybio = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float))))
     
@@ -113,11 +124,9 @@ def clean(directory, year):
                     "wage":["AverageMonthlyWage", wage_format]}
     
     '''Open CSV file'''
-    file = get_file(directory, year)
+    file = get_file(year)
     csv_reader = csv.reader(file, delimiter=",", quotechar='"')
     header = [s.replace('\xef\xbb\xbf', '') for s in csv_reader.next()]
-    print header 
-    sys.exit()
     
     errors_dict = defaultdict(set)
     
@@ -224,6 +233,8 @@ def clean(directory, year):
             ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
             ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
         
+        # if i == 10000:
+        #     break
     
     print errors_dict
     
@@ -232,19 +243,18 @@ def clean(directory, year):
     print
     print "finished reading file, writing output..."
     
-    new_dir = os.path.abspath(os.path.join(directory, year))
+    new_dir = os.path.abspath(os.path.join(DATA_DIR, 'rais', year))
     if not os.path.exists(new_dir):
         os.makedirs(new_dir)
     
-    new_file = os.path.abspath(os.path.join(new_dir, "ybio.tsv"))
+    new_file = os.path.abspath(os.path.join(new_dir, "ybio.tsv.bz2"))
     print ' writing file: ', new_file
     
     '''Create header for CSV file'''
-    header = ["year", "bra_id", "isic_id", "cbo_id", "wage", "num_emp", "num_est"]
+    header = ["year", "bra_id", "isic_id", "cbo_id", "wage", "num_emp", "num_est", "wage_avg", "num_emp_est"]
     
     '''Export to files'''
-    csv_file = open(new_file, 'wb')
-    csv_writer = csv.writer(csv_file, delimiter='\t',
+    csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerow(header)
     
@@ -252,26 +262,28 @@ def clean(directory, year):
         for isic in ybio[bra].keys():
             for cbo in ybio[bra][isic].keys():
                 csv_writer.writerow([year, bra, isic, cbo, \
-                    ybio[bra][isic][cbo]['wage'], \
-                    ybio[bra][isic][cbo]['num_emp'], \
-                    len(ybio[bra][isic][cbo]['num_est']) ])
+                    d(ybio[bra][isic][cbo]['wage']), \
+                    int(ybio[bra][isic][cbo]['num_emp']), \
+                    len(ybio[bra][isic][cbo]['num_est']), \
+                    d(ybio[bra][isic][cbo]['wage_avg']), \
+                    ybio[bra][isic][cbo]['num_emp_est'] ])
 
 if __name__ == "__main__":
+    start = time.time()
     
     # Get path of the file from the user
-    help_text_dir = "full path to directory with raw text CSV file "
     help_text_year = "the year of data being converted "
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--directory", help=help_text_dir)
     parser.add_argument("-y", "--year", help=help_text_year)
     args = parser.parse_args()
-    
-    directory = args.directory
-    if not directory:
-        directory = raw_input(help_text_dir)
     
     year = args.year
     if not year:
         year = raw_input(help_text_year)
     
-    clean(directory, year)
+    clean(year)
+    
+    total_run_time = (time.time() - start) / 60
+    print; print;
+    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print; print;

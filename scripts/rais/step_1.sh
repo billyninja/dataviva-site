@@ -1,10 +1,9 @@
-python step_1_aggregate.py -f Rais2002.csv
-python step_1_aggregate.py -f Rais2003.csv
-python step_1_aggregate.py -f Rais2004.csv
-python step_1_aggregate.py -f Rais2005.csv
-python step_1_aggregate.py -f Rais2006.csv
-python step_1_aggregate.py -f Rais2007.csv
-python step_1_aggregate.py -f Rais2008.csv
-python step_1_aggregate.py -f Rais2009.csv
-python step_1_aggregate.py -f Rais2010.csv
-python step_1_aggregate.py -f Rais2011.csv
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2003
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2004
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2005
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2006
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2007
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2008
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2009
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2010
+python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2011
