@@ -9,14 +9,18 @@
 """
 
 ''' Import statements '''
-import csv, sys, os, argparse, math, time
+import csv, sys, os, argparse, math, time, bz2
 from collections import defaultdict
 from os import environ
+from os.path import basename
 import pandas as pd
 import numpy as np
+from ..helpers import get_file
+from ..config import DATA_DIR
+from ..growth_lib import growth
 
 def get_unique(file, index, column):
-    if "o" in file:
+    if "o" in file.name:
         tbl = pd.read_csv(file, sep="\t", converters={"cbo_id": str})
     else:
         tbl = pd.read_csv(file, sep="\t")
@@ -27,19 +31,20 @@ def get_unique(file, index, column):
     
     return tbl.sum(axis=1)
 
-def uniques(dir, y):
+def uniques(y):
     
     # start with unique isics / bra
-    ybi_file = os.path.abspath(os.path.join(directory, "ybi.tsv"))
+    ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
+    ybi_file = get_file(ybi_file_path)
     yb_unique_isic = get_unique(ybi_file, "bra_id", "isic_id")
     
     # unique cbos / bra
-    ybo_file = os.path.abspath(os.path.join(directory, "ybo.tsv"))
+    ybo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybo.tsv'))
+    ybo_file = get_file(ybo_file_path)
     yb_unique_cbo = get_unique(ybo_file, "bra_id", "cbo_id")
-    # print yb_unique_cbo
-    # sys.exit()
     
-    yb_file = os.path.abspath(os.path.join(directory, "yb.tsv"))
+    yb_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yb.tsv'))
+    yb_file = get_file(yb_file_path)
     yb_unique = pd.read_csv(yb_file, sep="\t", index_col=["bra_id"])
     
     yb_unique["unique_isic"] = yb_unique_isic
@@ -47,58 +52,56 @@ def uniques(dir, y):
     
     # print out file
     print "writing yb file..."
-    yb_file = os.path.abspath(os.path.join(directory, "yb_uniques.tsv"))
-    yb_unique.to_csv(yb_file, sep="\t", index=True)
+    new_yb_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yb_uniques.tsv.bz2'))
+    yb_unique.to_csv(bz2.BZ2File(new_yb_file_path, 'wb'), sep="\t", index=True)
     
     
-    
-    yio_file = os.path.abspath(os.path.join(directory, "yio.tsv"))
+    yio_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yio.tsv'))
+    yio_file = get_file(yio_file_path)
     # unique cbos / isic
     yi_unique_cbo = get_unique(yio_file, "isic_id", "cbo_id")
         
     # print out file
-    yi_file = os.path.abspath(os.path.join(directory, "yi.tsv"))
+    yi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yi.tsv'))
+    yi_file = get_file(yi_file_path)
     yi_unique = pd.read_csv(yi_file, sep="\t", index_col="isic_id")
     yi_unique["unique_cbo"] = yi_unique_cbo
     
     print "writing yi file..."
-    yi_file = os.path.abspath(os.path.join(directory, "yi_uniques.tsv"))
-    yi_unique.to_csv(yi_file, sep="\t", index=True)
+    new_yi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yi_uniques.tsv.bz2'))
+    yi_unique.to_csv(bz2.BZ2File(new_yi_file_path, 'wb'), sep="\t", index=True)
     
     # unique isic / cbo
+    yio_file.seek(0)
     yo_unique_isic = get_unique(yio_file, "cbo_id", "isic_id")
     
     # print out file
-    yo_file = os.path.abspath(os.path.join(directory, "yo.tsv"))
+    yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yo.tsv'))
+    yo_file = get_file(yo_file_path)
     yo_unique = pd.read_csv(yo_file, sep="\t", converters={"cbo_id":str})
     yo_unique = yo_unique.set_index(["cbo_id"])
     yo_unique["unique_isic"] = yo_unique_isic
     
     print "writing yo file..."
-    yo_file = os.path.abspath(os.path.join(directory, "yo_uniques.tsv"))
-    yo_unique.to_csv(yo_file, sep="\t", index=True)
+    new_yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yo_uniques.tsv.bz2'))
+    yo_unique.to_csv(bz2.BZ2File(new_yo_file_path, 'wb'), sep="\t", index=True)
     
-
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help="year for calculations to be run")
-    parser.add_argument("-d", "--directory", help="directory for data")
-    args = parser.parse_args()
+    start = time.time()
     
-    directory = args.directory
-    if not directory:
-        directory = raw_input("Directory for data files: ")
+    # Get path of the file from the user
+    help_text_year = "the year of data being converted "
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-y", "--year", help=help_text_year)
+    args = parser.parse_args()
     
     year = args.year
     if not year:
-        year = raw_input("Year for calculations (or all): ")
-    if year == "all":
-        year = range(2002, 2012)
-    else:
-        year = [int(year)]
+        year = raw_input(help_text_year)
     
-    for y in year:
-        print
-        print "Year: {0}".format(y);
-        uniques(directory, y)
+    uniques(year)
+    
+    total_run_time = (time.time() - start) / 60
+    print; print;
+    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print; print;
