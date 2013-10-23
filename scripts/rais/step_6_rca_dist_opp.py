@@ -6,15 +6,15 @@
 """
 
 ''' Import statements '''
-import csv, sys, os, argparse, math, time
+import csv, sys, os, argparse, math, time, bz2
 from collections import defaultdict
 from os import environ
 import pandas as pd
 import numpy as np
+from ..helpers import get_file
+from ..config import DATA_DIR
+from ..growth_lib import growth
 
-growth_lib_dir = os.path.abspath('/Users/alexandersimoes/sites/visual_mg/scripts/growth_lib/')
-sys.path.append(growth_lib_dir)
-import growth
 
 def get_rcas(ybi, geo_level, y):
     ybi = ybi.reset_index(level="year")
@@ -22,7 +22,7 @@ def get_rcas(ybi, geo_level, y):
     ybi_index = pd.MultiIndex.from_tuples(ybi_index, names=["bra_id", "isic_id"])
     ybi = ybi.reindex(index=ybi_index)
     
-    ybi = ybi.drop(["year", "num_emp", "num_est"], axis=1)
+    ybi = ybi.drop(["year", "num_emp", "num_est", "wage_avg", "num_emp_est"], axis=1)
     
     ybi = ybi.unstack()
     levels = ybi.columns.levels
@@ -65,16 +65,16 @@ def get_rcas(ybi, geo_level, y):
     
     return rca_dist_opp
 
-def rca_dist_opp(directory, y):
+def rca_dist_opp(year):
     
-    ybi_file = os.path.abspath(os.path.join(directory, "ybi.tsv"))
+    ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
+    ybi_file = get_file(ybi_file_path)
     ybi = pd.read_csv(ybi_file, sep="\t", index_col=["year", "bra_id", "isic_id"])
     
     rca_dist_opp = []
     for geo_level in [2, 4, 7, 8]:
         print "geo level:", geo_level
-        rca_dist_opp = rca_dist_opp + get_rcas(ybi.copy(), geo_level, y)
-    
+        rca_dist_opp = rca_dist_opp + get_rcas(ybi.copy(), geo_level, year)
     
     # now time to merge!
     print "merging datasets..."
@@ -93,27 +93,28 @@ def rca_dist_opp(directory, y):
     ybi["distance"] = ybi_rdo["distance"]
     ybi["opp_gain"] = ybi_rdo["opp_gain"]
     
-    print ybi.head(10)
-    
     # print out file
     print "writing new ybi file..."
-    ybi_file = os.path.abspath(os.path.join(directory, "ybi_rcas_dist_opp.tsv"))
-    ybi.to_csv(ybi_file, sep="\t", index=True)
+    new_ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi_rcas_dist_opp.tsv.bz2'))
+    ybi .to_csv(bz2.BZ2File(new_ybi_file_path, 'wb'), sep="\t", index=True)
         
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help="year for calculations to be run")
-    parser.add_argument("-d", "--directory", help="directory for data")
-    args = parser.parse_args()
+    start = time.time()
     
-    directory = args.directory
-    if not directory:
-        directory = raw_input("Directory for data files: ")
+    # Get path of the file from the user
+    help_text_year = "the year of data being converted "
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-y", "--year", help=help_text_year)
+    args = parser.parse_args()
     
     year = args.year
     if not year:
-        year = raw_input("Year for calculations (or all): ")
-
-    rca_dist_opp(directory, year)
+        year = raw_input(help_text_year)
+    
+    rca_dist_opp(year)
+    
+    total_run_time = (time.time() - start) / 60
+    print; print;
+    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print; print;
