@@ -16,7 +16,7 @@ from ..config import DATA_DIR
 from ..growth_lib import growth
 
 def get_all_cbo(y):
-    yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybo.tsv'))
+    yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yo.tsv'))
     yo_file_path = get_file(yo_file_path)
 
     yo = pd.read_csv(yo_file_path, sep="\t", converters={"cbo_id":str})
@@ -44,7 +44,7 @@ def get_ybi_rcas(geo_level):
     
     return rcas
 
-def calculate_exclusivity(y):
+def calculate_exclusivity(y, delete_previous_file):
     start = time.time()
     all_cbo = get_all_cbo(y)
     
@@ -54,7 +54,7 @@ def calculate_exclusivity(y):
     denoms = rcas.sum()
     
     print "loading YBIO..."
-    ybio_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio.tsv'))
+    ybio_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio_required.tsv'))
     ybio_file_path = get_file(ybio_file_path)
     
     ybio = pd.read_csv(ybio_file_path, sep="\t", converters={"year": str, "cbo_id":str})
@@ -109,9 +109,9 @@ def calculate_exclusivity(y):
     yio_importance = yio_importance.set_index(["year", "isic_id", "cbo_id"])
     
     yio_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yio.tsv'))
-    yio_file_path = get_file(yio_file_path)
+    yio_file = get_file(yio_file_path)
     
-    yio = pd.read_csv(yio_file_path, sep="\t", converters={"year": str, "cbo_id": str})
+    yio = pd.read_csv(yio_file, sep="\t", converters={"year": str, "cbo_id": str})
     yio = yio.set_index(["year", "isic_id", "cbo_id"])
     yio["importance"] = yio_importance["importance"]
         
@@ -119,6 +119,10 @@ def calculate_exclusivity(y):
     print "writing to file..."
     new_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yio_importance.tsv.bz2'))
     yio.to_csv(bz2.BZ2File(new_file_path, 'wb'), sep="\t", index=True)
+    
+    if delete_previous_file:
+        print "deleting previous file"
+        os.remove(yio_file.name)
 
 if __name__ == "__main__":
     start = time.time()
@@ -127,13 +131,15 @@ if __name__ == "__main__":
     help_text_year = "the year of data being converted "
     parser = argparse.ArgumentParser()
     parser.add_argument("-y", "--year", help=help_text_year)
+    parser.add_argument("-d", "--delete", action='store_true', default=False)
     args = parser.parse_args()
     
+    delete_previous_file = args.delete
     year = args.year
     if not year:
         year = raw_input(help_text_year)
     
-    calculate_exclusivity(year)
+    calculate_exclusivity(year, delete_previous_file)
     
     total_run_time = (time.time() - start) / 60
     print; print;
