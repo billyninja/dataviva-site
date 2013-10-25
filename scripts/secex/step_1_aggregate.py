@@ -18,9 +18,6 @@ from decimal import Decimal, ROUND_HALF_UP
 from ..config import DATA_DIR
 from ..helpers import d, get_file
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-parent_dir = os.path.abspath(os.path.join(basedir, '..'))
-
 ''' Connect to DB '''
 db = MySQLdb.connect(host="localhost", user=environ["DATAVIVA_DB_USER"], 
                         passwd=environ["DATAVIVA_DB_PW"], 

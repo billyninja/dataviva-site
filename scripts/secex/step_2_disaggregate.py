@@ -21,7 +21,7 @@ def write(tables, year):
     print ' writing file:', new_file
     csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["year", "cbo_id"]+vals)
+    csv_writer.writerow(["year", "wld_id"]+vals)
     for wld in tables["yw"].keys():
         csv_writer.writerow([year, wld, d(tables["yw"][wld]['val_usd'])])
     
