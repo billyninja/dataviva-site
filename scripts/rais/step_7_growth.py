@@ -40,7 +40,7 @@ def growth(year, indexes, delete_previous_file):
     prev_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year, file_lookup[indexes]))
     prev_file = get_file(prev_file_path)
     if not prev_file:
-        print "Unable to find", current_file_path
+        print "Unable to find", prev_file_path
         sys.exit()
     prev = pd.read_csv(prev_file, sep="\t", converters=converters)
     prev = prev.set_index(index_cols)
