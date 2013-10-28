@@ -65,7 +65,8 @@ def main(year, delete_previous_file):
     # print out file
     yp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'yp_pcis.tsv'))
     yp_file = get_file(yp_file_path)
-    yp_unique = pd.read_csv(yp_file, sep="\t", index_col="hs_id")
+    yp_unique = pd.read_csv(yp_file, sep="\t", converters={"hs_id":str})
+    yp_unique = yp_unique.set_index(["hs_id"])
     yp_unique["unique_wld"] = yp_unique_wld
     
     print "writing yp file..."
@@ -79,7 +80,7 @@ def main(year, delete_previous_file):
     # print out file
     yw_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'yw_ecis.tsv'))
     yw_file = get_file(yw_file_path)
-    yw_unique = pd.read_csv(yw_file, sep="\t", converters={"cbo_id":str})
+    yw_unique = pd.read_csv(yw_file, sep="\t")
     yw_unique = yw_unique.set_index(["wld_id"])
     yw_unique["unique_hs"] = yw_unique_hs
     

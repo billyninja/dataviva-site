@@ -16,7 +16,7 @@ from ..config import DATA_DIR
 from ..growth_lib import growth
 from scripts import YEAR, DELETE_PREVIOUS_FILE
 
-def get_all_cbo(y):
+def get_all_cbo(year):
     yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yo.tsv'))
     yo_file_path = get_file(yo_file_path)
 
@@ -26,7 +26,7 @@ def get_all_cbo(y):
     
     return cbos
 
-def get_ybi_rcas(geo_level):
+def get_ybi_rcas(year, geo_level):
     ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
     ybi_file_path = get_file(ybi_file_path)
     ybi = pd.read_csv(ybi_file_path, sep="\t")
@@ -45,12 +45,12 @@ def get_ybi_rcas(geo_level):
     
     return rcas
 
-def main(y, delete_previous_file):
+def main(year, delete_previous_file):
     start = time.time()
-    all_cbo = get_all_cbo(y)
+    all_cbo = get_all_cbo(year)
     
     '''get ybi RCAs'''
-    rcas = get_ybi_rcas(8)
+    rcas = get_ybi_rcas(year, 8)
     
     denoms = rcas.sum()
     
