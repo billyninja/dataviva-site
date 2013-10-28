@@ -21,6 +21,7 @@ import numpy as np
 from ..helpers import get_file
 from ..config import DATA_DIR
 from ..growth_lib import growth
+from scripts import YEAR, DELETE_PREVIOUS_FILE
 
 def get_ybi_rcas(year, geo_level):
     ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
@@ -41,8 +42,7 @@ def get_ybi_rcas(year, geo_level):
     
     return rcas
 
-def required(year, delete_previous_file):
-    print year
+def main(year, delete_previous_file):
     
     print "loading YBIO..."
     file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio.tsv'))
@@ -57,11 +57,9 @@ def required(year, delete_previous_file):
     ybio_required = []
     for geo_level in [2, 4, 7, 8]:
         
-    # for geo_level in [8]:
         bra_criterion = ybio_data['bra_id'].map(lambda x: len(x) == geo_level)
         ybio_panel = ybio_data[isic_criterion & cbo_criterion & bra_criterion]
         
-        # ybio_panel["avg_num_emp"] = ybio_panel["num_emp"]/ybio_panel["num_est"]
         ybio_panel = ybio_panel.drop(["num_est", "num_emp"], axis=1)
         ybio_panel = ybio_panel.pivot_table(rows=["bra_id", "cbo_id"], \
                                             cols="isic_id", \
@@ -76,7 +74,10 @@ def required(year, delete_previous_file):
         s = time.time()
         geos = list(ybi_rcas.index)
         for geo in geos:
-            print year, geo, time.time() - s
+            # print year, geo, time.time() - s
+            sys.stdout.write('\r current location: ' + geo + ' ' * 10)
+            sys.stdout.flush() # important
+            
             s = time.time()
             
             avg_ranks = ybi_prox[geo].rank(ascending=False).dropna()
@@ -103,11 +104,10 @@ def required(year, delete_previous_file):
                 required_cbos = required_cbos[required_cbos >= 1]
             
                 for cbo in required_cbos.index:
-                    # x = 3
                     ybio_required.append([year, geo, isic, cbo, required_cbos[cbo]])
-                    # to_add.append([year, geo, isic, cbo, required_cbos[cbo], required_cbos[cbo]])
-                
-        print "total required rows:", len(ybio_required)
+        
+        print
+        print "total required rows added:", len(ybio_required)
         
     # merge
     print "merging datasets..."
@@ -131,19 +131,7 @@ def required(year, delete_previous_file):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    parser.add_argument("-d", "--delete", action='store_true', default=False)
-    args = parser.parse_args()
-    
-    delete_previous_file = args.delete
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    required(year, delete_previous_file)
+    main(YEAR, DELETE_PREVIOUS_FILE)
     
     total_run_time = (time.time() - start) / 60
     print; print;

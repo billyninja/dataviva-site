@@ -12,6 +12,7 @@ import numpy as np
 from ..config import DATA_DIR
 from ..helpers import get_file
 from ..growth_lib import growth
+from scripts import YEAR, DELETE_PREVIOUS_FILE
 
 ''' Connect to DB '''
 db = MySQLdb.connect(host="localhost", user=environ["DATAVIVA_DB_USER"], 
@@ -105,7 +106,7 @@ def get_wld_proximity(year):
 
     return prox
 
-def rdo(year, delete_previous_file):
+def main(year, delete_previous_file):
     
     ybp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'ybp.tsv'))
     ybp_file = get_file(ybp_file_path)
@@ -183,7 +184,7 @@ def rdo(year, delete_previous_file):
                                 tryto(dist_dom, hs, bra), tryto(dist_wld, hs, bra), \
                                 tryto(opp_gain_dom, hs, bra), tryto(opp_gain_wld, hs, bra) ])
         
-        print len(rca_dist_opp)
+        print len(rca_dist_opp), "rows updated"
     
     
     # now time to merge!
@@ -217,20 +218,7 @@ def rdo(year, delete_previous_file):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    parser.add_argument("-d", "--delete", action='store_true', default=False)
-    args = parser.parse_args()
-    
-    delete_previous_file = args.delete
-    
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    rdo(year, delete_previous_file)
+    main(YEAR, DELETE_PREVIOUS_FILE)
     
     total_run_time = (time.time() - start) / 60
     print; print;

@@ -14,7 +14,7 @@ import numpy as np
 from ..helpers import get_file
 from ..config import DATA_DIR
 from ..growth_lib import growth
-
+from scripts import YEAR, DELETE_PREVIOUS_FILE
 
 def get_rcas(ybi, geo_level, y):
     ybi = ybi.reset_index(level="year")
@@ -65,7 +65,7 @@ def get_rcas(ybi, geo_level, y):
     
     return rca_dist_opp
 
-def rca_dist_opp(year, delete_previous_file):
+def main(year, delete_previous_file):
     
     ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
     ybi_file = get_file(ybi_file_path)
@@ -105,20 +105,7 @@ def rca_dist_opp(year, delete_previous_file):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    parser.add_argument("-d", "--delete", action='store_true', default=False)
-    args = parser.parse_args()
-    
-    delete_previous_file = args.delete
-    
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    rca_dist_opp(year, delete_previous_file)
+    main(YEAR, DELETE_PREVIOUS_FILE)
     
     total_run_time = (time.time() - start) / 60
     print; print;

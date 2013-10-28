@@ -9,39 +9,48 @@
 import csv, sys, os, argparse, math, time, bz2
 from collections import defaultdict
 from os import environ
-from os.path import basename
+from os.path import basename, splitext
 import pandas as pd
 import numpy as np
 from ..helpers import get_file
 from ..config import DATA_DIR
 from ..growth_lib import growth
+from scripts import YEAR, DELETE_PREVIOUS_FILE, TABLE
 
-def growth(year, indexes, delete_previous_file):
+def main(year, delete_previous_file, table):
     index_lookup = {"b":"bra_id", "i":"isic_id", "o":"cbo_id"}
     file_lookup = {"yb":"yb_uniques.tsv", "ybi":"ybi_rcas_dist_opp.tsv", \
                     "ybio": "ybio_required.tsv", "ybo": "ybo.tsv", \
                     "yi": "yi_uniques.tsv", "yio": "yio_importance.tsv", \
                     "yo": "yo_uniques.tsv"}
-    index_cols = [index_lookup[i] for i in indexes if i != "y"]
-    converters = {"cbo_id": str} if "o" in indexes else None
+    index_cols = [index_lookup[i] for i in table if i != "y"]
+    converters = {"cbo_id": str} if "o" in table else None
     prev_year = str(int(year) - 1)
     prev_year_5 = str(int(year) - 5)
     
     print "loading current year"
-    current_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, file_lookup[indexes]))
+    current_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, file_lookup[table]))
     current_file = get_file(current_file_path)
     if not current_file:
-        print "Unable to find", current_file_path
-        sys.exit()
+        f = basename(file_lookup[table]) + "_growth.tsv"
+        current_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, f))
+        current_file = get_file(current_file_path)
+        if not current_file:
+            print "Unable to find", current_file_path
+            sys.exit()
     current = pd.read_csv(current_file, sep="\t", converters=converters)
     current = current.set_index(index_cols)
     
     print "loading previous year"
-    prev_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year, file_lookup[indexes]))
+    prev_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year, file_lookup[table]))
     prev_file = get_file(prev_file_path)
     if not prev_file:
-        print "Unable to find", prev_file_path
-        sys.exit()
+        f = splitext(basename(file_lookup[table]))[0] + "_growth.tsv"
+        prev_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year, f))
+        prev_file = get_file(prev_file_path)
+        if not prev_file:
+            print "Unable to find", prev_file_path
+            sys.exit()
     prev = pd.read_csv(prev_file, sep="\t", converters=converters)
     prev = prev.set_index(index_cols)
     
@@ -65,8 +74,12 @@ def growth(year, indexes, delete_previous_file):
     current["num_emp_growth_rate"] = (current["num_emp"] / prev["num_emp"]) - 1
     print (time.time() - s) / 60
     
-    prev_5_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year_5, file_lookup[indexes]))
+    prev_5_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year_5, file_lookup[table]))
     prev_5_file = get_file(prev_5_file_path)
+    if not prev_5_file:
+        f = splitext(basename(file_lookup[table]))[0] + "_growth.tsv"
+        prev_5_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year_5, f))
+        prev_5_file = get_file(prev_5_file_path)
     if prev_5_file:
         print "loading file for 5 years ago"
         prev_5 = pd.read_csv(prev_5_file, sep="\t", converters=converters)
@@ -84,7 +97,7 @@ def growth(year, indexes, delete_previous_file):
         print "calculating 5 year num_emp growth rate"
         current["num_emp_growth_rate_5"] = (current["num_emp"] / prev_5["num_emp"]) ** (1.0/5.0) - 1
     
-    new_file_name = basename(file_lookup[indexes]) + "_growth.tsv.bz2"
+    new_file_name = splitext(basename(file_lookup[table]))[0] + "_growth.tsv.bz2"
     print "writing new growth file..."
     new_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, new_file_name))
     current.to_csv(bz2.BZ2File(new_file_path, 'wb'), sep="\t", index=True)
@@ -96,25 +109,7 @@ def growth(year, indexes, delete_previous_file):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    help_text_index = "index columns on data i.e. ybi, ybio, ybo etc "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    parser.add_argument("-i", "--indexes", help=help_text_index)
-    parser.add_argument("-d", "--delete", action='store_true', default=False)
-    args = parser.parse_args()
-    
-    delete_previous_file = args.delete
-    
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    indexes = args.indexes
-    if not indexes:
-        indexes = raw_input(help_text_index)
-    
-    growth(year, indexes, delete_previous_file)
+    main(YEAR, DELETE_PREVIOUS_FILE, TABLE)
     
     total_run_time = (time.time() - start) / 60
     print; print;

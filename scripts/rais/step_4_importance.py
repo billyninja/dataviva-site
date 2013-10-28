@@ -14,6 +14,7 @@ import numpy as np
 from ..helpers import get_file
 from ..config import DATA_DIR
 from ..growth_lib import growth
+from scripts import YEAR, DELETE_PREVIOUS_FILE
 
 def get_all_cbo(y):
     yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yo.tsv'))
@@ -44,7 +45,7 @@ def get_ybi_rcas(geo_level):
     
     return rcas
 
-def calculate_exclusivity(y, delete_previous_file):
+def main(y, delete_previous_file):
     start = time.time()
     all_cbo = get_all_cbo(y)
     
@@ -127,19 +128,7 @@ def calculate_exclusivity(y, delete_previous_file):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    parser.add_argument("-d", "--delete", action='store_true', default=False)
-    args = parser.parse_args()
-    
-    delete_previous_file = args.delete
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    calculate_exclusivity(year, delete_previous_file)
+    main(YEAR, DELETE_PREVIOUS_FILE)
     
     total_run_time = (time.time() - start) / 60
     print; print;

@@ -9,72 +9,41 @@ from os import environ
 from decimal import Decimal, ROUND_HALF_UP
 from ..config import DATA_DIR
 from ..helpers import d, get_file
+from scripts import YEAR
 
 def write(tables, year):
     
     vals = ["val_usd"]
     directory = os.path.abspath(os.path.join(DATA_DIR, 'secex'))
+    index_lookup = {"b":"bra_id", "p":"hs_id", "w":"wld_id", "y": "year"}
     
-    '''YW'''
-    print
-    new_file = os.path.abspath(os.path.join(directory, year, "yw.tsv.bz2"))
-    print ' writing file:', new_file
-    csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["year", "wld_id"]+vals)
-    for wld in tables["yw"].keys():
-        csv_writer.writerow([year, wld, d(tables["yw"][wld]['val_usd'])])
-    
-    '''YP'''
-    new_file = os.path.abspath(os.path.join(directory, year, "yp.tsv.bz2"))
-    print ' writing file:', new_file
-    csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["year", "hs_id"]+vals)
-    for hs in tables["yp"].keys():
-        csv_writer.writerow([year, hs, d(tables["yp"][hs]['val_usd'])])
-    
-    '''YB'''
-    new_file = os.path.abspath(os.path.join(directory, year, "yb.tsv.bz2"))
-    print ' writing file:', new_file
-    csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["year", "bra_id"]+vals)
-    for bra in tables["yb"].keys():
-        csv_writer.writerow([year, bra, d(tables["yb"][bra]['val_usd']) ])
+    for tbl in tables.keys():
+        
+        new_file_name = tbl+".tsv.bz2"
+        new_file = os.path.abspath(os.path.join(directory, year, new_file_name))
+        new_file_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
+                                    quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        
+        '''Add headers'''
+        variable_cols = [index_lookup[char] for char in tbl]
+        new_file_writer.writerow(variable_cols + vals)
+        
+        print 'writing file:', new_file
+        
+        if len(tbl) == 2:
+            
+            for var in tables[tbl].keys():
+                new_file_writer.writerow([year, var, \
+                    d(tables[tbl][var]['val_usd']) ])
+        
+        elif len(tbl) == 3:
+                        
+            for var1 in tables[tbl].keys():
+                for var2 in tables[tbl][var1].keys():
+                    new_file_writer.writerow([year, var1, var2, \
+                        d(tables[tbl][var1][var2]['val_usd']) ])
 
-    '''YBW'''
-    new_file = os.path.abspath(os.path.join(directory, year, "ybw.tsv.bz2"))
-    print ' writing file:', new_file
-    csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["year", "bra_id", "wld_id"]+vals)
-    for bra in tables["ybw"].keys():
-        for wld in tables["ybw"][bra].keys():
-            csv_writer.writerow([year, bra, wld, d(tables["ybw"][bra][wld]['val_usd']) ])
-
-    '''YBP'''
-    new_file = os.path.abspath(os.path.join(directory, year, "ybp.tsv.bz2"))
-    print ' writing file:', new_file
-    csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["year", "bra_id", "hs_id"]+vals)
-    for bra in tables["ybp"].keys():
-        for hs in tables["ybp"][bra].keys():
-            csv_writer.writerow([year, bra, hs, d(tables["ybp"][bra][hs]['val_usd']) ])
-    
-    '''YPW'''
-    new_file = os.path.abspath(os.path.join(directory, year, "ypw.tsv.bz2"))
-    print ' writing file:', new_file
-    csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["year", "hs_id", "wld_id"]+vals)
-    for hs in tables["ypw"].keys():
-        for wld in tables["ypw"][hs].keys():
-            csv_writer.writerow([year, hs, wld, \
-                d(tables["ypw"][hs][wld]['val_usd']) ])
-
-def disaggregate(year):
+def main(year):
     tables = {
         "yb": defaultdict(lambda: defaultdict(float)),
         "yp": defaultdict(lambda: defaultdict(float)),
@@ -114,22 +83,13 @@ def disaggregate(year):
         if len(line["bra_id"]) == 8:
             tables["ypw"][line["hs_id"]][line["wld_id"]]["val_usd"] += float(line["val_usd"])
     
+    print
     write(tables, year)
 
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    args = parser.parse_args()
-    
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    disaggregate(year)
+    main(YEAR)
     
     total_run_time = (time.time() - start) / 60
     print; print;

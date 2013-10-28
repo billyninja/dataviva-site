@@ -10,6 +10,7 @@ import pandas as pd
 import pandas.io.sql as sql
 from ..config import DATA_DIR
 from ..helpers import get_file
+from scripts import YEAR, DELETE_PREVIOUS_FILE
 
 ''' Connect to DB '''
 db = MySQLdb.connect(host="localhost", user=environ["DATAVIVA_DB_USER"], 
@@ -26,7 +27,7 @@ def get_brazil_rcas(year):
     bra_rcas = sql.read_frame(q, db, index_col=["year", "hs_id"])
     return bra_rcas
 
-def wld_rcas(year, delete_previous_file):
+def main(year, delete_previous_file):
     print year
     
     print "loading yp..."
@@ -51,20 +52,7 @@ def wld_rcas(year, delete_previous_file):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    parser.add_argument("-d", "--delete", action='store_true', default=False)
-    args = parser.parse_args()
-    
-    delete_previous_file = args.delete
-    
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    wld_rcas(year, delete_previous_file)
+    main(YEAR, DELETE_PREVIOUS_FILE)
     
     total_run_time = (time.time() - start) / 60
     print; print;

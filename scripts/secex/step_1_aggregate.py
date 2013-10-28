@@ -17,6 +17,7 @@ from os import environ
 from decimal import Decimal, ROUND_HALF_UP
 from ..config import DATA_DIR
 from ..helpers import d, get_file
+from scripts import YEAR
 
 ''' Connect to DB '''
 db = MySQLdb.connect(host="localhost", user=environ["DATAVIVA_DB_USER"], 
@@ -72,7 +73,7 @@ def add(ybpw, munic, isic, occ, val_usd):
     ybpw[munic][isic][occ]["val_usd"] += val_usd
     return ybpw
 
-def clean(year):
+def main(year):
     '''Initialize our data dictionaries'''
     ybpw = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float))))
     
@@ -86,28 +87,24 @@ def clean(year):
                     "val_usd":["TransactionAmount_US$_FOB", float]}
     
     '''Open CSV file'''
-    print 'determining delimiter...'
-    
     raw_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', 'MDIC_{0}.csv'.format(year)))
     raw_file = get_file(raw_file_path)
+    delim = ";"
     if not raw_file:
-        print "unable to find", raw_file_path
-        sys.exit()
+        raw_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', 'MDIC_{0}.txt'.format(year)))
+        raw_file = get_file(raw_file_path)
+        delim = "|"
+        if not raw_file:
+            print "unable to find", raw_file_path
+            sys.exit()
     
-    # dialect = csv.Sniffer().sniff(raw_file.read(), delimiters=';,|')
-    # print raw_file
-    # sys.exit()
-    # raw_file.seek(0)
-    # print dialect
-    # sys.exit()
-    csv_reader = csv.reader(raw_file, delimiter=';')
+    csv_reader = csv.reader(raw_file, delimiter=delim)
     
     header = [s.replace('\xef\xbb\xbf', '') for s in csv_reader.next()]
     
     errors_dict = defaultdict(set)
     
     '''Populate the data dictionaries'''
-    # print 'reading CSV file "' + file_path + '"'
     for i, line in enumerate(csv_reader):
         
         line = dict(zip(header, line))
@@ -232,17 +229,7 @@ def clean(year):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    args = parser.parse_args()
-    
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    clean(year)
+    main(YEAR)
     
     total_run_time = (time.time() - start) / 60
     print; print;

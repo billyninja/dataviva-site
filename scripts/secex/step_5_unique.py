@@ -18,6 +18,7 @@ import numpy as np
 from ..helpers import get_file
 from ..config import DATA_DIR
 from ..growth_lib import growth
+from scripts import YEAR, DELETE_PREVIOUS_FILE
 
 def get_unique(file, index, column):
     if "p" in file.name:
@@ -31,7 +32,7 @@ def get_unique(file, index, column):
     
     return tbl.sum(axis=1)
 
-def uniques(y, delete_previous_file):
+def main(year, delete_previous_file):
     
     # start with unique hs / bra
     ybp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'ybp.tsv'))
@@ -95,20 +96,7 @@ def uniques(y, delete_previous_file):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    parser.add_argument("-d", "--delete", action='store_true', default=False)
-    args = parser.parse_args()
-    
-    delete_previous_file = args.delete
-    
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    uniques(year, delete_previous_file)
+    main(YEAR, DELETE_PREVIOUS_FILE)
     
     total_run_time = (time.time() - start) / 60
     print; print;

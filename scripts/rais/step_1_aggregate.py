@@ -24,7 +24,8 @@ from collections import defaultdict
 from os import environ
 from decimal import Decimal, ROUND_HALF_UP
 from ..config import DATA_DIR
-from ..helpers import d
+from ..helpers import d, get_file
+from scripts import YEAR
 
 ''' Connect to DB '''
 db = MySQLdb.connect(host="localhost", user=environ["DATAVIVA_DB_USER"], 
@@ -91,31 +92,12 @@ def add(ybio, munic, isic, occ, wage, emp, est):
     
     return ybio
 
-def get_file(year):
-    extensions = [
-        {'ext':'.csv.bz2', 'io':bz2.BZ2File},
-        {'ext':'.csv.gz', 'io':gzip.open},
-        {'ext':'.csv.zip', 'io':zipfile.ZipFile},
-        {'ext':'.csv', 'io':open}
-    ]
-    for e in extensions:
-        file_name = "Rais{0}{1}".format(year, e["ext"])
-        file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', file_name))
-        if os.path.exists(file_path):
-            file = e["io"](file_path)
-            if e["ext"] == '.csv.zip':
-                file = zipfile.ZipFile.open(file, "Rais{0}.csv".format(year))
-            print "Reading from file", file_path
-            return file
-    print "ERROR: unable to find file named Rais{0}.csv[.zip, .bz2, .gz] " \
-            "in directory specified.".format(year)
-    sys.exit()
-
-def clean(year):
+def main(year):
     '''Initialize our data dictionaries'''
     ybio = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float))))
     
-    lookup = {"munic": get_lookup("bra"), "isic": get_lookup("isic"), "occ": get_lookup("cbo"), "pr": get_lookup("pr")}
+    lookup = {"munic": get_lookup("bra"), "isic": get_lookup("isic"), \
+                "occ": get_lookup("cbo"), "pr": get_lookup("pr")}
     
     var_names = {"year":["Year", int], "est":"Establishment_ID", \
                     "emp":"Employee_ID", "munic": ["Municipality_ID", munic_format], \
@@ -124,8 +106,10 @@ def clean(year):
                     "wage":["AverageMonthlyWage", wage_format]}
     
     '''Open CSV file'''
-    file = get_file(year)
-    csv_reader = csv.reader(file, delimiter=",", quotechar='"')
+    raw_file_name = "Rais{0}.csv".format(year)
+    raw_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', raw_file_name))
+    raw_file = get_file(raw_file_path)
+    csv_reader = csv.reader(raw_file, delimiter=",", quotechar='"')
     header = [s.replace('\xef\xbb\xbf', '') for s in csv_reader.next()]
     
     errors_dict = defaultdict(set)
@@ -233,10 +217,13 @@ def clean(year):
             ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
             ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
         
-        # if i == 10000:
+        # if i == 100000:
         #     break
     
+    print
+    print "ERRORS BY COLUMN:"
     print errors_dict
+    print
     
     columns = {"y":"year", "b":"bra_id", "i":"isic_id", "o":"cbo_id"}
     
@@ -271,17 +258,7 @@ def clean(year):
 if __name__ == "__main__":
     start = time.time()
     
-    # Get path of the file from the user
-    help_text_year = "the year of data being converted "
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help=help_text_year)
-    args = parser.parse_args()
-    
-    year = args.year
-    if not year:
-        year = raw_input(help_text_year)
-    
-    clean(year)
+    main(YEAR)
     
     total_run_time = (time.time() - start) / 60
     print; print;

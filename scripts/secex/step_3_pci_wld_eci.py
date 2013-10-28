@@ -9,9 +9,9 @@ from collections import defaultdict
 from os import environ
 from ..config import DATA_DIR
 from ..helpers import get_file
+from scripts import YEAR, DELETE_PREVIOUS_FILE
 
-def pcis_ecis(year, delete_previous_file):
-    print year
+def main(year, delete_previous_file):
     
     pci_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', 'observatory_pcis.csv'))
     pci_file = get_file(pci_file_path)
@@ -57,17 +57,11 @@ def pcis_ecis(year, delete_previous_file):
         
 
 if __name__ == "__main__":
+    start = time.time()
     
-    # Get path of the file from the user
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--year", help="year")
-    parser.add_argument("-d", "--delete", action='store_true', default=False)
-    args = parser.parse_args()
+    main(YEAR, DELETE_PREVIOUS_FILE)
     
-    delete_previous_file = args.delete
-    
-    year = args.year
-    if not year:
-        year = raw_input("Year: ")
-
-    pcis_ecis(year, delete_previous_file)
+    total_run_time = (time.time() - start) / 60
+    print; print;
+    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print; print;
