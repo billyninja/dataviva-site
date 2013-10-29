@@ -115,6 +115,7 @@ def main(year, delete_previous_file):
     
     rca_dist_opp = []
     for geo_level in [2, 4, 7, 8]:
+    # for geo_level in [2]:
         print "geo_level",geo_level
         
         '''
@@ -152,6 +153,7 @@ def main(year, delete_previous_file):
         '''
             OPP GAIN
         '''
+        
         '''same PCIs for all since we are using world PCIs'''
         pcis = get_pcis(geo_level, year)
         
@@ -170,6 +172,13 @@ def main(year, delete_previous_file):
         
         # print rcas_dom_binary.shape, prox_dom.shape, pcis.shape
         opp_gain_wld = growth.opportunity_gain(rcas_wld_binary, prox_wld, pcis_wld)
+        
+        '''
+            SET RCAS TO NULL
+        '''
+        rcas_dom = rcas_dom.replace(0, np.nan)
+        rcas_wld = rcas_dom.replace(0, np.nan)
+        
         
         def tryto(df, col, ind):
             if col in df.columns:
@@ -198,7 +207,7 @@ def main(year, delete_previous_file):
     all_ybp_indexes = set(ybp.index).union(set(ybp_rdo.index))
     
     all_ybp_indexes = pd.MultiIndex.from_tuples(all_ybp_indexes, names=["year", "bra_id", "hs_id"])
-    ybp = ybp.reindex(index=all_ybp_indexes, fill_value=0)
+    ybp = ybp.reindex(index=all_ybp_indexes)
     ybp["rca"] = ybp_rdo["rca"]
     ybp["rca_wld"] = ybp_rdo["rca_wld"]
     ybp["distance"] = ybp_rdo["distance"]
