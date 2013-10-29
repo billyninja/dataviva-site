@@ -19,10 +19,10 @@ from scripts import YEAR, DELETE_PREVIOUS_FILE, TABLE
 
 def main(year, delete_previous_file, table):
     index_lookup = {"b":"bra_id", "i":"isic_id", "o":"cbo_id"}
-    file_lookup = {"yb":"yb_uniques.tsv", "ybi":"ybi_rcas_dist_opp.tsv", \
+    file_lookup = {"yb":"yb_diversity.tsv", "ybi":"ybi_rcas_dist_opp.tsv", \
                     "ybio": "ybio_required.tsv", "ybo": "ybo.tsv", \
-                    "yi": "yi_uniques.tsv", "yio": "yio_importance.tsv", \
-                    "yo": "yo_uniques.tsv"}
+                    "yi": "yi_diversity.tsv", "yio": "yio_importance.tsv", \
+                    "yo": "yo_diversity.tsv"}
     index_cols = [index_lookup[i] for i in table if i != "y"]
     converters = {"cbo_id": str} if "o" in table else None
     prev_year = str(int(year) - 1)

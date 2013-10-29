@@ -1,43 +1,43 @@
 #!/bin/bash
 
 if [ $2 = "yb" ]; then
-  file=yb_uniques.tsv.bz2
-  fields=(bra_id year wage num_emp num_est wage_avg num_emp_est unique_isic unique_cbo)
+  file=yb_diversity.tsv.bz2
+  fields=(bra_id year wage num_emp num_est wage_avg num_emp_est isic_diversity isic_diversity_eff cbo_diversity cbo_diversity_eff)
   if [ $1 -gt "2002" ]; then
     file=yb_uniques_growth.tsv.bz2
-    fields=(bra_id year wage num_emp num_est wage_avg num_emp_est unique_isic unique_cbo wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct)
+    fields=(bra_id year wage num_emp num_est wage_avg num_emp_est isic_diversity isic_diversity_eff cbo_diversity cbo_diversity_eff wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct)
   fi
   if [ $1 -gt "2006" ]; then
     file=yb_uniques_growth.tsv.bz2
-    fields=(bra_id year wage num_emp num_est wage_avg num_emp_est unique_isic unique_cbo wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct wage_growth_val_5 wage_growth_pct_5 num_emp_growth_val_5 num_emp_growth_pct_5)
+    fields=(bra_id year wage num_emp num_est wage_avg num_emp_est isic_diversity isic_diversity_eff cbo_diversity cbo_diversity_eff wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct wage_growth_val_5 wage_growth_pct_5 num_emp_growth_val_5 num_emp_growth_pct_5)
   fi
 fi
 
 
 if [ $2 = "yi" ]; then
-  file=yi_uniques.tsv.bz2
-  fields=(isic_id year wage num_emp num_est wage_avg num_emp_est unique_cbo)
+  file=yi_diversity.tsv.bz2
+  fields=(isic_id year wage num_emp num_est wage_avg num_emp_est cbo_diversity cbo_diversity_eff bra_diversity bra_diversity_eff)
   if [ $1 -gt "2002" ]; then
     file=yi_uniques_growth.tsv.bz2
-    fields=(isic_id year wage num_emp num_est wage_avg num_emp_est unique_cbo wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct)
+    fields=(isic_id year wage num_emp num_est wage_avg num_emp_est cbo_diversity cbo_diversity_eff bra_diversity bra_diversity_eff wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct)
   fi
   if [ $1 -gt "2006" ]; then
     file=yi_uniques_growth.tsv.bz2
-    fields=(isic_id year wage num_emp num_est wage_avg num_emp_est unique_cbo wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct wage_growth_val_5 wage_growth_pct_5 num_emp_growth_val_5 num_emp_growth_pct_5)
+    fields=(isic_id year wage num_emp num_est wage_avg num_emp_est cbo_diversity cbo_diversity_eff bra_diversity bra_diversity_eff wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct wage_growth_val_5 wage_growth_pct_5 num_emp_growth_val_5 num_emp_growth_pct_5)
   fi
 fi
 
 
 if [ $2 = "yo" ]; then
-  file=yo_uniques.tsv.bz2
-  fields=(cbo_id year wage num_emp num_est wage_avg num_emp_est unique_isic)
+  file=yo_diversity.tsv.bz2
+  fields=(cbo_id year wage num_emp num_est wage_avg num_emp_est isic_diversity isic_diversity_eff bra_diversity bra_diversity_eff)
   if [ $1 -gt "2002" ]; then
     file=yo_uniques_growth.tsv.bz2
-    fields=(cbo_id year wage num_emp num_est wage_avg num_emp_est unique_isic wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct)
+    fields=(cbo_id year wage num_emp num_est wage_avg num_emp_est isic_diversity isic_diversity_eff bra_diversity bra_diversity_eff wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct)
   fi
   if [ $1 -gt "2006" ]; then
     file=yo_uniques_growth.tsv.bz2
-    fields=(cbo_id year wage num_emp num_est wage_avg num_emp_est unique_isic wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct wage_growth_val_5 wage_growth_pct_5 num_emp_growth_val_5 num_emp_growth_pct_5)
+    fields=(cbo_id year wage num_emp num_est wage_avg num_emp_est isic_diversity isic_diversity_eff bra_diversity bra_diversity_eff wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct wage_growth_val_5 wage_growth_pct_5 num_emp_growth_val_5 num_emp_growth_pct_5)
   fi
 fi
 
