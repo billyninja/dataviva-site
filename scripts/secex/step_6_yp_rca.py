@@ -31,7 +31,7 @@ def main(year, delete_previous_file):
     print year
     
     print "loading yp..."
-    yp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'yp_pcis_uniques.tsv'))
+    yp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'yp_pcis_diversity.tsv'))
     yp_file = get_file(yp_file_path)
     yp = pd.read_csv(yp_file, sep="\t", converters={"hs_id": str})
     yp = yp.set_index(["year", "hs_id"])
@@ -41,7 +41,7 @@ def main(year, delete_previous_file):
     yp["rca"] = brazil_rcas["rca"]
     
     # print out files
-    new_yp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'yp_pcis_uniques_rcas.tsv.bz2'))
+    new_yp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'yp_pcis_diversity_rcas.tsv.bz2'))
     print ' writing file:', new_yp_file_path
     yp.to_csv(bz2.BZ2File(new_yp_file_path, 'wb'), sep="\t", index=True)
     

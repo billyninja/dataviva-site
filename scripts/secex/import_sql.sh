@@ -1,43 +1,43 @@
 #!/bin/bash
 
 if [ $2 = "yw" ]; then
-  file=yw_ecis_uniques.tsv.bz2
-  fields=(wld_id year val_usd eci unique_hs)  
+  file=yw_ecis_diversity.tsv.bz2
+  fields=(wld_id year val_usd eci hs_diversity hs_diversity_eff bra_diversity bra_diversity_eff)
   if [ $1 -gt "2000" ]; then
-    file=yw_ecis_uniques_growth.tsv.bz2
-    fields=(wld_id year val_usd eci unique_hs val_usd_growth_val val_usd_growth_pct)
+    file=yw_ecis_diversity_growth.tsv.bz2
+    fields=(wld_id year val_usd eci hs_diversity hs_diversity_eff bra_diversity bra_diversity_eff val_usd_growth_val val_usd_growth_pct)
   fi
   if [ $1 -gt "2004" ]; then
-    file=yw_ecis_uniques_growth.tsv.bz2
-    fields=(wld_id year val_usd eci unique_hs val_usd_growth_val val_usd_growth_pct val_usd_growth_val_5 val_usd_growth_pct_5)
+    file=yw_ecis_diversity_growth.tsv.bz2
+    fields=(wld_id year val_usd eci hs_diversity hs_diversity_eff bra_diversity bra_diversity_eff val_usd_growth_val val_usd_growth_pct val_usd_growth_val_5 val_usd_growth_pct_5)
   fi
 fi
 
 
 if [ $2 = "yp" ]; then
-  file=yp_pcis_uniques_rcas.tsv.bz2
-  fields=(year hs_id val_usd pci unique_wld rca_wld)
+  file=yp_pcis_diversity_rcas.tsv.bz2
+  fields=(year hs_id val_usd pci wld_diversity wld_diversity_eff bra_diversity bra_diversity_eff rca_wld)
   if [ $1 -gt "2000" ]; then
-    file=yp_pcis_uniques_rcas_growth.tsv.bz2
-    fields=(hs_id year val_usd pci unique_wld rca_wld val_usd_growth_val val_usd_growth_pct)
+    file=yp_pcis_diversity_rcas_growth.tsv.bz2
+    fields=(hs_id year val_usd pci wld_diversity wld_diversity_eff bra_diversity bra_diversity_eff rca_wld val_usd_growth_val val_usd_growth_pct)
   fi
   if [ $1 -gt "2004" ]; then
-    file=yp_pcis_uniques_rcas_growth.tsv.bz2
-    fields=(hs_id year val_usd pci unique_wld rca_wld val_usd_growth_val val_usd_growth_pct val_usd_growth_val_5 val_usd_growth_pct_5)
+    file=yp_pcis_diversity_rcas_growth.tsv.bz2
+    fields=(hs_id year val_usd pci wld_diversity wld_diversity_eff bra_diversity bra_diversity_eff rca_wld val_usd_growth_val val_usd_growth_pct val_usd_growth_val_5 val_usd_growth_pct_5)
   fi
 fi
 
 
 if [ $2 = "yb" ]; then
-  file=yb_ecis_uniques.tsv.bz2
-  fields=(bra_id year val_usd eci unique_hs unique_wld)
+  file=yb_ecis_diversity.tsv.bz2
+  fields=(bra_id year val_usd eci hs_diversity hs_diversity_eff wld_diversity wld_diversity_eff)
   if [ $1 -gt "2000" ]; then
-    file=yb_ecis_uniques_growth.tsv.bz2
-    fields=(bra_id year val_usd eci unique_hs unique_wld val_usd_growth_val val_usd_growth_pct)
+    file=yb_ecis_diversity_growth.tsv.bz2
+    fields=(bra_id year val_usd eci hs_diversity hs_diversity_eff wld_diversity wld_diversity_eff val_usd_growth_val val_usd_growth_pct)
   fi
   if [ $1 -gt "2004" ]; then
-    file=yb_ecis_uniques_growth.tsv.bz2
-    fields=(bra_id year val_usd eci unique_hs unique_wld val_usd_growth_val val_usd_growth_pct val_usd_growth_val_5 val_usd_growth_pct_5)
+    file=yb_ecis_diversity_growth.tsv.bz2
+    fields=(bra_id year val_usd eci hs_diversity hs_diversity_eff wld_diversity wld_diversity_eff val_usd_growth_val val_usd_growth_pct val_usd_growth_val_5 val_usd_growth_pct_5)
   fi
 fi
 

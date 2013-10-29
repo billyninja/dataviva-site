@@ -77,11 +77,11 @@ if [ $2 = "yio" ]; then
   fields=(year isic_id cbo_id wage num_emp num_est wage_avg num_emp_est importance)
   if [ $1 -gt "2002" ]; then
     file=yio_importance_growth.tsv.bz2
-    fields=(bra_id isic_id cbo_id year wage num_emp num_est wage_avg num_emp_est importance wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct)
+    fields=(isic_id cbo_id year wage num_emp num_est wage_avg num_emp_est importance wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct)
   fi
   if [ $1 -gt "2006" ]; then
     file=yio_importance_growth.tsv.bz2
-    fields=(bra_id isic_id cbo_id year wage num_emp num_est wage_avg num_emp_est importance wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct wage_growth_val_5 wage_growth_pct_5 num_emp_growth_val_5 num_emp_growth_pct_5)
+    fields=(isic_id cbo_id year wage num_emp num_est wage_avg num_emp_est importance wage_growth_val wage_growth_pct num_emp_growth_val num_emp_growth_pct wage_growth_val_5 wage_growth_pct_5 num_emp_growth_val_5 num_emp_growth_pct_5)
   fi
 fi
 

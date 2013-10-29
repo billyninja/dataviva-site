@@ -74,7 +74,7 @@ def get_ybp_domestic_rcas(geo_level, year):
     return rcas
 
 def get_pcis(geo_level, year):
-    yp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'yp_pcis_uniques_rcas.tsv'))
+    yp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'yp_pcis_diversity_rcas.tsv'))
     yp_file = get_file(yp_file_path)
     yp = pd.read_csv(yp_file, sep="\t", converters={"hs_id":str})
     
