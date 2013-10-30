@@ -95,7 +95,7 @@ if [ $2 = "ybpw" ]; then
     fields=(bra_id hs_id wld_id year val_usd val_usd_growth_val val_usd_growth_pct)
   fi
   if [ $1 -gt "2004" ]; then
-    file=ybpw_growth.tsv.bz2bz2
+    file=ybpw_growth.tsv.bz2
     fields=(bra_id hs_id wld_id year val_usd val_usd_growth_val val_usd_growth_pct val_usd_growth_val_5 val_usd_growth_pct_5)
   fi
 fi
@@ -123,5 +123,11 @@ fi
 bunzip2 -k $file
 file=${file%".bz2"}
 echo $file
-mysql -u $DATAVIVA_DB_USER -p -e "load data local infile '$file' into table secex_$2 fields terminated by '\t' lines terminated by '\n' IGNORE 1 LINES $sql_fields SET $sql_set" dataviva --local-infile=1
+
+if [[ -z $DATAVIVA_DB_PW ]]; then
+  mysql -u $DATAVIVA_DB_USER -e "load data local infile '$file' into table secex_$2 fields terminated by '\t' lines terminated by '\n' IGNORE 1 LINES $sql_fields SET $sql_set" dataviva --local-infile=1
+else
+  mysql -u $DATAVIVA_DB_USER -p $DATAVIVA_DB_PW -e "load data local infile '$file' into table secex_$2 fields terminated by '\t' lines terminated by '\n' IGNORE 1 LINES $sql_fields SET $sql_set" dataviva --local-infile=1
+fi
+
 rm $file
