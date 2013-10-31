@@ -177,7 +177,7 @@ def main(year, delete_previous_file):
             SET RCAS TO NULL
         '''
         rcas_dom = rcas_dom.replace(0, np.nan)
-        rcas_wld = rcas_dom.replace(0, np.nan)
+        rcas_wld = rcas_wld.replace(0, np.nan)
         
         
         def tryto(df, col, ind):
