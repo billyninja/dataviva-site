@@ -17,25 +17,34 @@ from ..growth_lib import growth
 from scripts import YEAR, DELETE_PREVIOUS_FILE
 
 def get_all_cbo(year):
-    yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yo.tsv'))
-    yo_file_path = get_file(yo_file_path)
+    yo_file_names = ['yo.tsv', 'yo_diversity.tsv', 'yo_diversity_growth.tsv']
+    for yo_file_name in yo_file_names:
+        yo_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, yo_file_name))
+        yo_file = get_file(yo_file_path)
+        if yo_file:
+            break
 
-    yo = pd.read_csv(yo_file_path, sep="\t", converters={"cbo_id":str})
+    yo = pd.read_csv(yo_file, sep="\t", converters={"cbo_id":str})
     yo = yo.set_index(["cbo_id"])
     cbos = [cbo for cbo in list(yo.index) if len(cbo) == 4]
     
     return cbos
 
 def get_ybi_rcas(year, geo_level):
-    ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
-    ybi_file_path = get_file(ybi_file_path)
-    ybi = pd.read_csv(ybi_file_path, sep="\t")
+    ybi_file_names = ['ybi.tsv', 'ybi_rcas_dist_opp.tsv', 'ybi_rcas_dist_opp_growth.tsv']
+    for ybi_file_name in ybi_file_names:
+        ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, ybi_file_name))
+        ybi_file = get_file(ybi_file_path)
+        if ybi_file:
+            break
+    
+    ybi = pd.read_csv(ybi_file, sep="\t")
     
     isic_criterion = ybi['isic_id'].map(lambda x: len(x) == 5)
     bra_criterion = ybi['bra_id'].map(lambda x: len(x) == geo_level)
     
     ybi = ybi[isic_criterion & bra_criterion]
-    ybi = ybi.drop(["year", "num_emp", "num_est"], axis=1)
+    ybi = ybi[["bra_id", "isic_id", "wage"]]
     
     ybi = ybi.pivot(index="bra_id", columns="isic_id", values="wage").fillna(0)
     
@@ -44,6 +53,32 @@ def get_ybi_rcas(year, geo_level):
     rcas[rcas < 1] = 0
     
     return rcas
+
+def get_ybio(year):
+    print "loading YBIO..."
+    ybio_file_names = ['ybio.tsv', 'ybio_required.tsv', 'ybio_required_growth.tsv']
+    for ybio_file_name in ybio_file_names:
+        ybio_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, ybio_file_name))
+        ybio_file = get_file(ybio_file_path)
+        if ybio_file:
+            break
+    
+    ybio = pd.read_csv(ybio_file, sep="\t", converters={"year": str, "cbo_id":str})
+    isic_criterion = ybio['isic_id'].map(lambda x: len(x) == 5)
+    cbo_criterion = ybio['cbo_id'].map(lambda x: len(x) == 4)
+    bra_criterion = ybio['bra_id'].map(lambda x: len(x) == 8)
+    ybio = ybio[isic_criterion & cbo_criterion & bra_criterion]
+    
+    ybio = ybio[["isic_id", "cbo_id", "bra_id", "num_emp"]]
+    print "pivoting YBIO..."
+    ybio = ybio.pivot_table(rows=["isic_id", "cbo_id"], cols="bra_id", values="num_emp")
+    ybio = ybio.fillna(0)
+    
+    panel = ybio.to_panel()
+    panel = panel.swapaxes("items", "minor")
+    panel = panel.swapaxes("major", "minor")
+    
+    return panel
 
 def main(year, delete_previous_file):
     start = time.time()
@@ -54,37 +89,18 @@ def main(year, delete_previous_file):
     
     denoms = rcas.sum()
     
-    print "loading YBIO..."
-    ybio_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio_required.tsv'))
-    ybio_file_path = get_file(ybio_file_path)
-    
-    ybio = pd.read_csv(ybio_file_path, sep="\t", converters={"year": str, "cbo_id":str})
-    isic_criterion = ybio['isic_id'].map(lambda x: len(x) == 5)
-    cbo_criterion = ybio['cbo_id'].map(lambda x: len(x) == 4)
-    bra_criterion = ybio['bra_id'].map(lambda x: len(x) == 8)
-    ybio = ybio[isic_criterion & cbo_criterion & bra_criterion]
-    
-    ybio = ybio.drop(["num_est", "wage"], axis=1)
-    print "pivoting YBIO..."
-    ybio = ybio.pivot_table(rows=["isic_id", "cbo_id"], cols="bra_id", values="num_emp")
-    ybio = ybio.fillna(0)
-    
-    panel = ybio.to_panel()
-    panel = panel.swapaxes("items", "minor")
-    panel = panel.swapaxes("major", "minor")
-  
     # z       = occupations
     # rows    = bras
     # colums  = isics
+    ybio = get_ybio(year)
     
-    print y, time.time() - start
-    # sys.exit()
+    print year, time.time() - start
     yio_importance = []
     for cbo in all_cbo:
         start = time.time()
         
         try:
-            num_emp = panel[cbo].fillna(0)
+            num_emp = ybio[cbo].fillna(0)
         except:
             continue
         numerators = num_emp * rcas
@@ -100,9 +116,9 @@ def main(year, delete_previous_file):
         
         for isic in importance.index:
             imp = importance[isic]
-            yio_importance.append([y, isic, cbo, imp])
+            yio_importance.append([year, isic, cbo, imp])
         
-        print y, cbo, time.time() - start
+        print year, cbo, time.time() - start
     
     # now time to merge!
     print "merging datasets..."
