@@ -89,7 +89,7 @@ def main(year):
     '''Open CSV file'''
     raw_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', 'MDIC_{0}.csv'.format(year)))
     raw_file = get_file(raw_file_path)
-    delim = ";"
+    delim = "|"
     if not raw_file:
         raw_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', 'MDIC_{0}.txt'.format(year)))
         raw_file = get_file(raw_file_path)
