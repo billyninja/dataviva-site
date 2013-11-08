@@ -108,93 +108,56 @@ def get_wld_proximity(year):
 
 def main(year, delete_previous_file):
     
-    ybp_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, 'ybp.tsv'))
-    ybp_file = get_file(ybp_file_path)
-    ybp = pd.read_csv(ybp_file, sep="\t", converters={"hs_id":str})
-    ybp = ybp.set_index(["year", "bra_id", "hs_id"])
+    ypw_file_path = os.path.abspath(os.path.join(DATA_DIR, 'comtrade', year, 'ypw.tsv'))
+    ypw_file = get_file(ypw_file_path)
+    ypw = pd.read_csv(ypw_file, sep="\t", converters={"hs_id":str})
     
-    rca_dist_opp = []
-    for geo_level in [2, 4, 7, 8]:
-    # for geo_level in [2]:
-        print "geo_level",geo_level
-        
-        '''
-            RCAS
-        '''
+    '''
+        RCAS
+    '''
+    ypw_rcas = ypw.copy()
+    ypw_rcas = ypw_rcas.drop(["year"], axis=1)
+    ypw_rcas = ypw_rcas.pivot(index="wld_id", columns="hs_id", values="val_usd").fillna(0)
+    rcas = growth.rca(ypw_rcas)
     
-        rcas_dom = get_ybp_domestic_rcas(geo_level, year)
-        rcas_wld = get_ybp_wld_rcas(geo_level, year)
-        
+    # print rcas.ix["sabra"]
+    rcas = pd.DataFrame(rcas.stack(), columns=["rca"])
+    # print rcas.head(20)
+    # sys.exit()
     
-        rcas_dom_binary = rcas_dom.copy()
-        rcas_dom_binary[rcas_dom_binary >= 1] = 1
-        rcas_dom_binary[rcas_dom_binary < 1] = 0
-        
-        rcas_wld_binary = rcas_wld.copy()
-        rcas_wld_binary[rcas_wld_binary >= 1] = 1
-        rcas_wld_binary[rcas_wld_binary < 1] = 0
+    ypw = ypw.set_index(["wld_id", "hs_id"])
+    ypw["rca"] = rcas
+    ypw = ypw.set_index(["year"], append=True)
+    ypw = ypw.reorder_levels(["year", "wld_id", "hs_id"])
     
-        '''
-            DISTANCES
-        '''
+    new_ypw_file_path = os.path.abspath(os.path.join(DATA_DIR, 'comtrade', year, 'ypw_rcas.tsv.bz2'))
+    print ' writing file:', new_ypw_file_path
+    ypw.to_csv(bz2.BZ2File(new_ypw_file_path, 'wb'), sep="\t", index=True)
     
-        '''domestic distances'''
-        prox_dom = growth.proximity(rcas_dom_binary)
-        dist_dom = growth.distance(rcas_dom_binary, prox_dom).fillna(0)
-        
-        '''world distances'''
-        prox_wld = get_wld_proximity(year)
-        hs_wld = set(rcas_wld_binary.columns).intersection(set(prox_wld.columns))
-        prox_wld = prox_wld.reindex(columns=hs_wld, index=hs_wld)
-        rcas_wld_binary = rcas_wld_binary.reindex(columns=hs_wld)
-        
-        dist_wld = growth.distance(rcas_wld_binary, prox_wld).fillna(0)
+    sys.exit()
     
-        '''
-            OPP GAIN
-        '''
-        
-        '''same PCIs for all since we are using world PCIs'''
-        pcis = get_pcis(geo_level, year)
-        
-        all_hs_dom = set(pcis.index).intersection(set(rcas_dom.columns))
-        pcis_dom = pcis.reindex(index=all_hs_dom)
-        rcas_dom_binary = rcas_dom_binary.reindex(columns = all_hs_dom)
-        prox_dom = prox_dom.reindex(index = all_hs_dom, columns = all_hs_dom)
-        
-        # print rcas_dom_binary.shape, prox_dom.shape, pcis.shape
-        opp_gain_dom = growth.opportunity_gain(rcas_dom_binary, prox_dom, pcis_dom)
-        
-        all_hs_wld = set(pcis.index).intersection(set(rcas_wld.columns))
-        pcis_wld = pcis.reindex(index=all_hs_wld)
-        rcas_wld_binary = rcas_wld_binary.reindex(columns = all_hs_wld)
-        prox_wld = prox_wld.reindex(index = all_hs_wld, columns = all_hs_wld)
-        
-        # print rcas_dom_binary.shape, prox_dom.shape, pcis.shape
-        opp_gain_wld = growth.opportunity_gain(rcas_wld_binary, prox_wld, pcis_wld)
-        
-        
-        '''
-            SET RCAS TO NULL
-        '''
-        rcas_dom = rcas_dom.replace(0, np.nan)
-        rcas_wld = rcas_wld.replace(0, np.nan)
-        
-        
-        def tryto(df, col, ind):
-            if col in df.columns:
-                if ind in df.index:
-                    return df[col][ind]
-            return None
-        
-        for bra in set(rcas_dom.index).union(set(rcas_wld.index)):
-            for hs in set(rcas_dom.columns).union(set(rcas_wld.columns)):
-                rca_dist_opp.append([year, bra, hs, \
-                                tryto(rcas_dom, hs, bra), tryto(rcas_wld, hs, bra), \
-                                tryto(dist_dom, hs, bra), tryto(dist_wld, hs, bra), \
-                                tryto(opp_gain_dom, hs, bra), tryto(opp_gain_wld, hs, bra) ])
-        
-        print len(rca_dist_opp), "rows updated"
+    
+    '''
+        SET RCAS TO NULL
+    '''
+    rcas_dom = rcas_dom.replace(0, np.nan)
+    rcas_wld = rcas_wld.replace(0, np.nan)
+    
+    
+    def tryto(df, col, ind):
+        if col in df.columns:
+            if ind in df.index:
+                return df[col][ind]
+        return None
+    
+    for bra in set(rcas_dom.index).union(set(rcas_wld.index)):
+        for hs in set(rcas_dom.columns).union(set(rcas_wld.columns)):
+            rca_dist_opp.append([year, bra, hs, \
+                            tryto(rcas_dom, hs, bra), tryto(rcas_wld, hs, bra), \
+                            tryto(dist_dom, hs, bra), tryto(dist_wld, hs, bra), \
+                            tryto(opp_gain_dom, hs, bra), tryto(opp_gain_wld, hs, bra) ])
+    
+    print len(rca_dist_opp), "rows updated"
     
     
     # now time to merge!
