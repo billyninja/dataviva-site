@@ -163,7 +163,7 @@ def main(year):
         ybpw = add(ybpw, data["munic"], data["hs"], data["wld"], data["val_usd"])
 
         # wld 2digit (continents)
-        ybio = add(ybpw, data["munic"], data["hs"], data["wld"][:2], data["val_usd"])
+        ybpw = add(ybpw, data["munic"], data["hs"], data["wld"][:2], data["val_usd"])
         
         # hs 2digit
         ybpw = add(ybpw, data["munic"], data["hs"][:2], data["wld"][:2], data["val_usd"])
