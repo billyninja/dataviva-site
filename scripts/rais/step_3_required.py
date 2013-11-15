@@ -42,82 +42,103 @@ def get_ybi_rcas(year, geo_level):
     
     return rcas
 
-def main(year, delete_previous_file):
-    
+def get_ybio(year):
     print "loading YBIO..."
     file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio.tsv'))
     file = get_file(file_path)
     ybio = pd.read_csv(file, sep="\t", converters={"year": int, "cbo_id":str})
     
-    ybio_data = ybio.drop(["year", "wage"], axis=1)
+    return ybio
+
+def get_yi(year):
+    yi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'yi.tsv'))
+    yi_file = get_file(yi_file_path)
+    yi = pd.read_csv(yi_file, sep="\t")
+
+    isic_criterion = yi['isic_id'].map(lambda x: len(x) == 5)
+    yi = yi[isic_criterion]
+    yi = yi.drop(["year", "wage", "num_emp", "num_est", "wage_avg"], axis=1)
+    yi = yi.set_index("isic_id")["num_emp_est"]
     
+    return yi
+
+def get_ybi(year, val):
+    to_drop = ["year", "wage", "num_emp", "num_est", "wage_avg", "num_emp_est"]
+    
+    ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
+    ybi_file_path = get_file(ybi_file_path)
+    ybi = pd.read_csv(ybi_file_path, sep="\t")
+    
+    isic_criterion = ybi['isic_id'].map(lambda x: len(x) == 5)
+    
+    ybi = ybi[isic_criterion]
+    dont_drop = to_drop.index(val)
+    del to_drop[dont_drop]
+    ybi = ybi.drop(to_drop, axis=1)
+    
+    return ybi
+
+def main(year, delete_previous_file):
+    
+    ybio = get_ybio(year)
+    
+    ybio_data = ybio.drop(["year", "wage", "num_est", "wage_avg", "num_emp_est"], axis=1)
     isic_criterion = ybio_data['isic_id'].map(lambda x: len(x) == 5)
     cbo_criterion = ybio_data['cbo_id'].map(lambda x: len(str(x)) == 4)
+    ybio_data = ybio_data[isic_criterion & cbo_criterion]
+    
+    ybi = get_ybi(year, "num_emp_est")
     
     ybio_required = []
-    for geo_level in [2, 4, 7, 8]:
+    for geo_level in [2, 4, 8]:
         
         bra_criterion = ybio_data['bra_id'].map(lambda x: len(x) == geo_level)
-        ybio_panel = ybio_data[isic_criterion & cbo_criterion & bra_criterion]
-        
-        ybio_panel = ybio_panel.drop(["num_est", "num_emp"], axis=1)
+        ybio_panel = ybio_data[bra_criterion]
         ybio_panel = ybio_panel.pivot_table(rows=["bra_id", "cbo_id"], \
                                             cols="isic_id", \
-                                            values="num_emp_est")
-        
+                                            values="num_emp")
         ybio_panel = ybio_panel.to_panel()
+
+        yi = get_yi(year)
         
-        '''get ybi RCAs'''
-        ybi_rcas = get_ybi_rcas(year, geo_level)
-        ybi_prox = growth.proximity(ybi_rcas.T)
+        bra_criterion = ybi['bra_id'].map(lambda x: len(x) == geo_level)
+        ybi_ras = ybi[bra_criterion]
+        ybi_ras = ybi_ras.pivot(index="bra_id", columns="isic_id", values="num_emp_est").fillna(0)
+        ybi_ras = ybi_ras / yi
         
-        s = time.time()
-        geos = list(ybi_rcas.index)
-        for geo in geos:
-            # print year, geo, time.time() - s
-            sys.stdout.write('\r current location: ' + geo + ' ' * 10)
+        bras = ybi_ras.index
+        for bra in bras:
+            sys.stdout.write('\r current location: ' + bra + ' ' * 10)
             sys.stdout.flush() # important
             
-            s = time.time()
-            
-            avg_ranks = ybi_prox[geo].rank(ascending=False).dropna()
-            
-            for isic in ybi_rcas.columns:
-                # filter ranking for only geos with RCA by multiplying by 0
-                best_isic_matches = ybi_rcas[isic] * avg_ranks
-                best_isic_matches = best_isic_matches[best_isic_matches > 0]
-                
-                if not len(best_isic_matches):
-                    continue
-                
-                # if this location has RCA just use its required
-                if best_isic_matches.order().index[0] == geo:
-                    required_geos = [geo]
-                
-                # take top 20%
-                num_geos = math.ceil(len(best_isic_matches) *.2)
-                required_geos = list(best_isic_matches.order()[:num_geos].index)
-                
-                required_cbos = ybio_panel[isic].ix[required_geos].fillna(0)
-                # print required_cbos
-                required_cbos = required_cbos.mean(axis=0)
-                required_cbos = required_cbos[required_cbos >= 1]
+            isics = ybi_ras.columns
+            for isic in isics:
+    
+                bra_isic_ras = ybi_ras[isic][bra]
+                half_std = ybi_ras[isic].std() / 2
+    
+                ras_similar = ((ybi_ras[isic] - bra_isic_ras) / ybi_ras[isic].std()).abs()
+                ras_similar = ras_similar[ras_similar <= half_std].index
+    
+                required_cbos = ybio_panel[isic].ix[list(ras_similar)].fillna(0).mean(axis=0)
             
                 for cbo in required_cbos.index:
-                    ybio_required.append([year, geo, isic, cbo, required_cbos[cbo]])
-        
+                    ybio_required.append([year, bra, isic, cbo, required_cbos[cbo]])
+    
         print
         print "total required rows added:", len(ybio_required)
-        
-    # merge
+    
+    
     print "merging datasets..."
     ybio_required = pd.DataFrame(ybio_required, columns=["year", "bra_id", "isic_id", "cbo_id", "required"])
-    ybio_required['year'] = ybio_required['year'].astype(int)
-    ybio['year'] = ybio['year'].astype(int)
-    ybio = pd.merge(ybio, ybio_required, on=["year", "bra_id", "isic_id", "cbo_id"], how="outer").fillna(0)
-    # ybio["year"] = ybio["year_x"]
-    # ybio = ybio.drop(["year_y", "year_x"])
-    print ybio.columns
+    ybio_required = ybio_required.set_index(["year", "bra_id", "isic_id", "cbo_id"])
+    
+    ybio = ybio.set_index(["year", "bra_id", "isic_id", "cbo_id"])
+    ybio["required"] = ybio_required["required"]
+    # ybio_required['year'] = ybio_required['year'].astype(int)
+    # ybio['year'] = ybio['year'].astype(int)
+    # ybio = pd.merge(ybio, ybio_required, on=["year", "bra_id", "isic_id", "cbo_id"], how="outer").fillna(0)
+    # print ybio.columns
         
     # print out file
     print "writing to file..."
@@ -127,6 +148,9 @@ def main(year, delete_previous_file):
     if delete_previous_file:
         print "deleting previous file"
         os.remove(file.name)
+    
+    
+    sys.exit()
 
 if __name__ == "__main__":
     start = time.time()
