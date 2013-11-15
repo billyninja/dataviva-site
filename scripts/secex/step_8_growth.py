@@ -32,7 +32,7 @@ def main(year, delete_previous_file, table):
     current_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, file_lookup[table]))
     current_file = get_file(current_file_path)
     if not current_file:
-        f = basename(file_lookup[table]) + "_growth.tsv"
+        f = splitext(basename(file_lookup[table]))[0] + "_growth.tsv"
         current_file_path = os.path.abspath(os.path.join(DATA_DIR, 'secex', year, f))
         current_file = get_file(current_file_path)
         if not current_file:
