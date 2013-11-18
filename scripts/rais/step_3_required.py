@@ -23,25 +23,6 @@ from ..config import DATA_DIR
 from ..growth_lib import growth
 from scripts import YEAR, DELETE_PREVIOUS_FILE
 
-def get_ybi_rcas(year, geo_level):
-    ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
-    ybi_file_path = get_file(ybi_file_path)
-    ybi = pd.read_csv(ybi_file_path, sep="\t")
-    
-    isic_criterion = ybi['isic_id'].map(lambda x: len(x) == 5)
-    bra_criterion = ybi['bra_id'].map(lambda x: len(x) == geo_level)
-    
-    ybi = ybi[isic_criterion & bra_criterion]
-    ybi = ybi.drop(["year", "num_emp", "num_est"], axis=1)
-    
-    ybi = ybi.pivot(index="bra_id", columns="isic_id", values="wage").fillna(0)
-    
-    rcas = growth.rca(ybi)
-    rcas[rcas >= 1] = 1
-    rcas[rcas < 1] = 0
-    
-    return rcas
-
 def get_ybio(year):
     print "loading YBIO..."
     file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio.tsv'))
@@ -63,21 +44,22 @@ def get_yi(year):
     return yi
 
 def get_ybi(year, val):
-    to_drop = ["year", "wage", "num_emp", "num_est", "wage_avg", "num_emp_est"]
+    ybi_file_names = ['ybi.tsv', 'ybi_rcas_dist_opp.tsv', 'ybi_rcas_dist_opp_growth.tsv']
+    for ybi_file_name in ybi_file_names:
+        ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, ybi_file_name))
+        ybi_file = get_file(ybi_file_path)
+        if ybi_file:
+            break
     
-    ybi_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybi.tsv'))
-    ybi_file_path = get_file(ybi_file_path)
-    ybi = pd.read_csv(ybi_file_path, sep="\t")
+    ybi = pd.read_csv(ybi_file, sep="\t")
     
     isic_criterion = ybi['isic_id'].map(lambda x: len(x) == 5)
     
     ybi = ybi[isic_criterion]
-    dont_drop = to_drop.index(val)
-    del to_drop[dont_drop]
-    ybi = ybi.drop(to_drop, axis=1)
+    ybi = ybi[["bra_id", "isic_id"]+[val]]
     
     return ybi
-
+    
 def main(year, delete_previous_file):
     
     ybio = get_ybio(year)
@@ -90,7 +72,7 @@ def main(year, delete_previous_file):
     ybi = get_ybi(year, "num_emp_est")
     
     ybio_required = []
-    for geo_level in [2, 4, 8]:
+    for geo_level in [2, 4, 7, 8]:
         
         bra_criterion = ybio_data['bra_id'].map(lambda x: len(x) == geo_level)
         ybio_panel = ybio_data[bra_criterion]
@@ -111,17 +93,32 @@ def main(year, delete_previous_file):
             sys.stdout.write('\r current location: ' + bra + ' ' * 10)
             sys.stdout.flush() # important
             
+            half_std = ybi_ras.std() / 2
+            ras_similar_df = ((ybi_ras - ybi_ras.ix[bra]) / ybi_ras.std()).abs()
+            
+            # ras_similar_df = ras_similar_df <= half_std
+            
             isics = ybi_ras.columns
             for isic in isics:
+                # print isic
     
-                bra_isic_ras = ybi_ras[isic][bra]
-                half_std = ybi_ras[isic].std() / 2
+                # bra_isic_ras = ybi_ras[isic][bra]
+                # half_std = ybi_ras[isic].std() / 2
     
-                ras_similar = ((ybi_ras[isic] - bra_isic_ras) / ybi_ras[isic].std()).abs()
-                ras_similar = ras_similar[ras_similar <= half_std].index
-    
+                # ras_similar = ((ybi_ras[isic] - bra_isic_ras) / ybi_ras[isic].std()).abs()
+                ras_similar = ras_similar_df[isic][ras_similar_df[isic] <= half_std[isic]]
+                
+                # max only use top 20% of all locations
+                max_cutoff = len(bras)*.2
+                max_cutoff = 100
+                ras_similar = ras_similar.order(ascending=False).index[:max_cutoff]
+                
+                if not len(ras_similar):
+                    continue
+                
                 required_cbos = ybio_panel[isic].ix[list(ras_similar)].fillna(0).mean(axis=0)
-            
+                required_cbos = required_cbos[required_cbos >= 1]
+                
                 for cbo in required_cbos.index:
                     ybio_required.append([year, bra, isic, cbo, required_cbos[cbo]])
     
