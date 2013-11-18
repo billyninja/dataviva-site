@@ -94,7 +94,6 @@ def main(year, delete_previous_file):
     # colums  = isics
     ybio = get_ybio(year)
     
-    print year, time.time() - start
     yio_importance = []
     for cbo in all_cbo:
         start = time.time()
@@ -118,9 +117,12 @@ def main(year, delete_previous_file):
             imp = importance[isic]
             yio_importance.append([year, isic, cbo, imp])
         
-        print year, cbo, time.time() - start
+        # print year, cbo, time.time() - start
+        sys.stdout.write('\r ' + year + ' ' + cbo + ' '*10)
+        sys.stdout.flush() # important
     
     # now time to merge!
+    print
     print "merging datasets..."
     yio_importance = pd.DataFrame(yio_importance, columns=["year", "isic_id", "cbo_id", "importance"])
     yio_importance = yio_importance.set_index(["year", "isic_id", "cbo_id"])
