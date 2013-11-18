@@ -78,7 +78,7 @@ def get_lookup(type):
         cursor.execute("select bra_id, pr_id from attrs_bra_pr")
         return {r[0]:r[1] for r in cursor.fetchall()}
 
-def add(ybio, munic, isic, occ, wage, emp, est):
+def add_3(ybio, munic, isic, occ, wage, emp, est):
     ybio[munic][isic][occ]["wage"] += float(wage)
     ybio[munic][isic][occ]["num_emp"] += 1
     ybio[munic][isic][occ]["wage_avg"] = ybio[munic][isic][occ]["wage"] / ybio[munic][isic][occ]["num_emp"]
@@ -92,9 +92,96 @@ def add(ybio, munic, isic, occ, wage, emp, est):
     
     return ybio
 
+def add_2(yxx, x1, x2, wage, emp, est):
+    yxx[x1][x2]["wage"] += float(wage)
+    yxx[x1][x2]["num_emp"] += 1
+    yxx[x1][x2]["wage_avg"] = yxx[x1][x2]["wage"] / yxx[x1][x2]["num_emp"]
+    
+    try:
+        yxx[x1][x2]["num_est"].add(est)
+    except AttributeError:
+        yxx[x1][x2]["num_est"] = set([est])
+    
+    yxx[x1][x2]["num_emp_est"] = yxx[x1][x2]["num_emp"] / len(yxx[x1][x2]["num_est"])
+    
+    return yxx
+
+def add_1(yx, x, wage, emp, est):
+    yx[x]["wage"] += float(wage)
+    yx[x]["num_emp"] += 1
+    yx[x]["wage_avg"] = yx[x]["wage"] / yx[x]["num_emp"]
+    
+    try:
+        yx[x]["num_est"].add(est)
+    except AttributeError:
+        yx[x]["num_est"] = set([est])
+    
+    yx[x]["num_emp_est"] = yx[x]["num_emp"] / len(yx[x]["num_est"])
+    
+    return yx
+
+def write(tables, directory, year):
+    
+    vals = ["wage", "num_emp", "num_est", "wage_avg", "num_emp_est"]
+    index_lookup = {"b":"bra_id", "i":"isic_id", "o":"cbo_id", "y": "year"}
+    
+    for tbl in tables.keys():
+        
+        new_file_name = tbl+".tsv.bz2"
+        new_file = os.path.abspath(os.path.join(directory, year, new_file_name))
+        new_file_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
+                                    quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        
+        '''Add headers'''
+        variable_cols = [index_lookup[char] for char in tbl]
+        new_file_writer.writerow(variable_cols + vals)
+        
+        print 'writing file:', new_file
+        
+        if len(tbl) == 2:
+            
+            for var in tables[tbl].keys():
+                new_file_writer.writerow([year, var, \
+                    d(tables[tbl][var]['wage']), \
+                    int(tables[tbl][var]['num_emp']), \
+                    len(tables[tbl][var]['num_est']), \
+                    d(tables[tbl][var]['wage_avg']), \
+                    tables[tbl][var]['num_emp_est'] ])
+        
+        elif len(tbl) == 3:
+                        
+            for var1 in tables[tbl].keys():
+                for var2 in tables[tbl][var1].keys():
+                    new_file_writer.writerow([year, var1, var2, \
+                        d(tables[tbl][var1][var2]['wage']), \
+                        int(tables[tbl][var1][var2]['num_emp']), \
+                        len(tables[tbl][var1][var2]['num_est']), \
+                        d(tables[tbl][var1][var2]['wage_avg']), \
+                        tables[tbl][var1][var2]['num_emp_est'] ])
+
+        elif len(tbl) == 4:
+                        
+            for var1 in tables[tbl].keys():
+                for var2 in tables[tbl][var1].keys():
+                    for var3 in tables[tbl][var1][var2].keys():
+                        new_file_writer.writerow([year, var1, var2, var3, \
+                            d(tables[tbl][var1][var2][var3]['wage']), \
+                            int(tables[tbl][var1][var2][var3]['num_emp']), \
+                            len(tables[tbl][var1][var2][var3]['num_est']), \
+                            d(tables[tbl][var1][var2][var3]['wage_avg']), \
+                            tables[tbl][var1][var2][var3]['num_emp_est'] ])
+
 def main(year):
     '''Initialize our data dictionaries'''
     ybio = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float))))
+    
+    ybi = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
+    ybo = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
+    yio = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
+    
+    yb = defaultdict(lambda: defaultdict(float))
+    yi = defaultdict(lambda: defaultdict(float))
+    yo = defaultdict(lambda: defaultdict(float))
     
     lookup = {"munic": get_lookup("bra"), "isic": get_lookup("isic"), \
                 "occ": get_lookup("cbo"), "pr": get_lookup("pr")}
@@ -168,54 +255,110 @@ def main(year):
         
         if errors:
             continue
+        # data["est"] = data["munic"]+data["isic"]+data["occ"]+data["est"]
         
-        data["est"] = data["munic"]+data["isic"]+data["occ"]+data["est"]
-        ybio = add(ybio, data["munic"], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+        # full
+        ybio = add_3(ybio, data["munic"], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+        ybi = add_2(ybi, data["munic"], data["isic"], data["wage"], data["emp"], data["est"])
+        ybo = add_2(ybo, data["munic"], data["occ"], data["wage"], data["emp"], data["est"])
+        yio = add_2(yio, data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+        yb = add_1(yb, data["munic"], data["wage"], data["emp"], data["est"])
+        yi = add_1(yi, data["isic"], data["wage"], data["emp"], data["est"])
+        yo = add_1(yo, data["occ"], data["wage"], data["emp"], data["est"])
 
-        # cbo 1digit
-        ybio = add(ybio, data["munic"], data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        # cbo 1digit / 2digit
+        ybio = add_3(ybio, data["munic"], data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybo = add_2(ybo, data["munic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybo = add_2(ybo, data["munic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        yio = add_2(yio, data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        yio = add_2(yio, data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        yo = add_1(yo, data["occ"][:1], data["wage"], data["emp"], data["est"])
+        yo = add_1(yo, data["occ"][:2], data["wage"], data["emp"], data["est"])
         
-        # isic 1digit
-        ybio = add(ybio, data["munic"], data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"], data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"], data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"], data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"], data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"], data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
+        # isic 1digit / 3digit
+        ybio = add_3(ybio, data["munic"], data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"], data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"], data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"], data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"], data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"], data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
+        
+        ybi = add_2(ybi, data["munic"], data["isic"][:3], data["wage"], data["emp"], data["est"])
+        ybi = add_2(ybi, data["munic"], data["isic"][:1], data["wage"], data["emp"], data["est"])
+        
+        yio = add_2(yio, data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
+        yio = add_2(yio, data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        yio = add_2(yio, data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        yio = add_2(yio, data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
+        yio = add_2(yio, data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        yio = add_2(yio, data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        
+        yi = add_1(yi, data["isic"][:3], data["wage"], data["emp"], data["est"])
+        yi = add_1(yi, data["isic"][:1], data["wage"], data["emp"], data["est"])
         
         # bra 4digit
-        ybio = add(ybio, data["munic"][:4], data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:4], data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:4], data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:4], data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:4], data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:4], data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:4], data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:4], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:4], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:4], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+        
+        ybi = add_2(ybi, data["munic"][:4], data["isic"][:1], data["wage"], data["emp"], data["est"])
+        ybi = add_2(ybi, data["munic"][:4], data["isic"][:3], data["wage"], data["emp"], data["est"])
+        ybi = add_2(ybi, data["munic"][:4], data["isic"], data["wage"], data["emp"], data["est"])
+        
+        ybo = add_2(ybo, data["munic"][:4], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybo = add_2(ybo, data["munic"][:4], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybo = add_2(ybo, data["munic"][:4], data["occ"], data["wage"], data["emp"], data["est"])
+        
+        yb = add_1(yb, data["munic"][:4], data["wage"], data["emp"], data["est"])
         
         # bra 2digit
-        ybio = add(ybio, data["munic"][:2], data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:2], data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:2], data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:2], data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:2], data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:2], data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:2], data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:2], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
-        ybio = add(ybio, data["munic"][:2], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybio = add_3(ybio, data["munic"][:2], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+        
+        ybi = add_2(ybi, data["munic"][:2], data["isic"][:1], data["wage"], data["emp"], data["est"])
+        ybi = add_2(ybi, data["munic"][:2], data["isic"][:3], data["wage"], data["emp"], data["est"])
+        ybi = add_2(ybi, data["munic"][:2], data["isic"], data["wage"], data["emp"], data["est"])
+        
+        ybo = add_2(ybo, data["munic"][:2], data["occ"][:1], data["wage"], data["emp"], data["est"])
+        ybo = add_2(ybo, data["munic"][:2], data["occ"][:2], data["wage"], data["emp"], data["est"])
+        ybo = add_2(ybo, data["munic"][:2], data["occ"], data["wage"], data["emp"], data["est"])
+        
+        yb = add_1(yb, data["munic"][:2], data["wage"], data["emp"], data["est"])
         
         if data["munic"] in lookup["pr"]:
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
-            ybio = add(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"][:1], data["occ"][:1], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"][:3], data["occ"][:1], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"][:1], data["occ"][:2], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"][:3], data["occ"][:2], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"][:1], data["occ"], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"][:3], data["occ"], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"][:1], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"][:2], data["wage"], data["emp"], data["est"])
+            ybio = add_3(ybio, lookup["pr"][data["munic"]], data["isic"], data["occ"], data["wage"], data["emp"], data["est"])
+            
+            ybi = add_2(ybi, lookup["pr"][data["munic"]], data["isic"][:1], data["wage"], data["emp"], data["est"])
+            ybi = add_2(ybi, lookup["pr"][data["munic"]], data["isic"][:3], data["wage"], data["emp"], data["est"])
+            ybi = add_2(ybi, lookup["pr"][data["munic"]], data["isic"], data["wage"], data["emp"], data["est"])
+        
+            ybo = add_2(ybo, lookup["pr"][data["munic"]], data["occ"][:1], data["wage"], data["emp"], data["est"])
+            ybo = add_2(ybo, lookup["pr"][data["munic"]], data["occ"][:2], data["wage"], data["emp"], data["est"])
+            ybo = add_2(ybo, lookup["pr"][data["munic"]], data["occ"], data["wage"], data["emp"], data["est"])
+        
+            yb = add_1(yb, lookup["pr"][data["munic"]], data["wage"], data["emp"], data["est"])
         
         # if i == 100000:
         #     break
@@ -234,26 +377,43 @@ def main(year):
     if not os.path.exists(new_dir):
         os.makedirs(new_dir)
     
-    new_file = os.path.abspath(os.path.join(new_dir, "ybio.tsv.bz2"))
-    print ' writing file: ', new_file
+    directory = os.path.abspath(os.path.join(DATA_DIR, "rais"))
     
-    '''Create header for CSV file'''
-    header = ["year", "bra_id", "isic_id", "cbo_id", "wage", "num_emp", "num_est", "wage_avg", "num_emp_est"]
+    tables = {
+        "yb": yb,
+        "ybi": ybi,
+        "ybo": ybo,
+        "ybio": ybio,
+        "yi": yi,
+        "yio": yio,
+        "yo": yo
+    }
+    write(tables, directory, year)
     
-    '''Export to files'''
-    csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(header)
-    
-    for bra in ybio.keys():
-        for isic in ybio[bra].keys():
-            for cbo in ybio[bra][isic].keys():
-                csv_writer.writerow([year, bra, isic, cbo, \
-                    d(ybio[bra][isic][cbo]['wage']), \
-                    int(ybio[bra][isic][cbo]['num_emp']), \
-                    len(ybio[bra][isic][cbo]['num_est']), \
-                    d(ybio[bra][isic][cbo]['wage_avg']), \
-                    ybio[bra][isic][cbo]['num_emp_est'] ])
+    # new_dir = os.path.abspath(os.path.join(DATA_DIR, 'rais', year))
+    # if not os.path.exists(new_dir):
+    #     os.makedirs(new_dir)
+    # 
+    # new_file = os.path.abspath(os.path.join(new_dir, "ybio.tsv.bz2"))
+    # print ' writing file: ', new_file
+    # 
+    # '''Create header for CSV file'''
+    # header = ["year", "bra_id", "isic_id", "cbo_id", "wage", "num_emp", "num_est", "wage_avg", "num_emp_est"]
+    # 
+    # '''Export to files'''
+    # csv_writer = csv.writer(bz2.BZ2File(new_file, 'wb'), delimiter='\t',
+    #                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    # csv_writer.writerow(header)
+    # 
+    # for bra in ybio.keys():
+    #     for isic in ybio[bra].keys():
+    #         for cbo in ybio[bra][isic].keys():
+    #             csv_writer.writerow([year, bra, isic, cbo, \
+    #                 d(ybio[bra][isic][cbo]['wage']), \
+    #                 int(ybio[bra][isic][cbo]['num_emp']), \
+    #                 len(ybio[bra][isic][cbo]['num_est']), \
+    #                 d(ybio[bra][isic][cbo]['wage_avg']), \
+    #                 ybio[bra][isic][cbo]['num_emp_est'] ])
 
 if __name__ == "__main__":
     start = time.time()
