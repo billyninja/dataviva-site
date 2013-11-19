@@ -143,8 +143,6 @@ def main(year, delete_previous_file):
         print "deleting previous file"
         os.remove(file.name)
     
-    
-    sys.exit()
 
 if __name__ == "__main__":
     start = time.time()
