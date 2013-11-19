@@ -121,12 +121,18 @@ def main(year, delete_previous_file):
         print "total required rows added:", len(ybio_required)
     
     
+    # print "merging datasets..."
+    # ybio_required = pd.DataFrame(ybio_required, columns=["year", "bra_id", "isic_id", "cbo_id", "required"])
+    # ybio_required = ybio_required.set_index(["year", "bra_id", "isic_id", "cbo_id"])
+    # 
+    # ybio = ybio.set_index(["year", "bra_id", "isic_id", "cbo_id"])
+    # ybio["required"] = ybio_required["required"]
+    
     print "merging datasets..."
     ybio_required = pd.DataFrame(ybio_required, columns=["year", "bra_id", "isic_id", "cbo_id", "required"])
-    ybio_required = ybio_required.set_index(["year", "bra_id", "isic_id", "cbo_id"])
-    
-    ybio = ybio.set_index(["year", "bra_id", "isic_id", "cbo_id"])
-    ybio["required"] = ybio_required["required"]
+    ybio_required['year'] = ybio_required['year'].astype(int)
+    ybio['year'] = ybio['year'].astype(int)
+    ybio = pd.merge(ybio, ybio_required, on=["year", "bra_id", "isic_id", "cbo_id"], how="outer").fillna(0)
         
     # print out file
     print "writing to file..."
