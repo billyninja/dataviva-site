@@ -1,9 +1,0 @@
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2003
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2004
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2005
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2006
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2007
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2008
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2009
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2010
-python scripts/rais/step_1_aggregate.py -d /Users/alexandersimoes/sites/dataviva_data/rais -y 2011
