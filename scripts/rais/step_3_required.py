@@ -64,9 +64,6 @@ def main(year, delete_previous_file):
     
     ybio = get_ybio(year)
     
-    print ybio
-    
-    ybio_data = ybio.copy()
     ybio_data = ybio.drop(["year", "wage", "num_est", "wage_avg", "num_emp_est"], axis=1)
     isic_criterion = ybio_data['isic_id'].map(lambda x: len(x) == 5)
     cbo_criterion = ybio_data['cbo_id'].map(lambda x: len(str(x)) == 4)
@@ -75,7 +72,7 @@ def main(year, delete_previous_file):
     ybi = get_ybi(year, "num_emp_est")
     
     ybio_required = []
-    for geo_level in [2, 4, 8]:
+    for geo_level in [2, 4, 7, 8]:
         
         bra_criterion = ybio_data['bra_id'].map(lambda x: len(x) == geo_level)
         ybio_panel = ybio_data[bra_criterion]
@@ -91,34 +88,6 @@ def main(year, delete_previous_file):
         ybi_ras = ybi_ras.pivot(index="bra_id", columns="isic_id", values="num_emp_est").fillna(0)
         ybi_ras = ybi_ras / yi
         
-        
-        
-        bras = ybi_ras.index
-        for bra in bras:
-            sys.stdout.write('\r current location: ' + bra + ' ' * 10)
-            sys.stdout.flush() # important
-            
-            isics = ybi_ras.columns
-            for isic in isics:
-                
-                required_cbos = ybio_panel[isic].ix[bra].fillna(0)
-                required_cbos = required_cbos[required_cbos >= 1]
-                
-                for cbo in required_cbos.index:
-                    ybio_required.append([year, bra, isic, cbo, required_cbos[cbo]])
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        continue
         bras = ybi_ras.index
         for bra in bras:
             sys.stdout.write('\r current location: ' + bra + ' ' * 10)
@@ -132,16 +101,11 @@ def main(year, delete_previous_file):
             isics = ybi_ras.columns
             for isic in isics:
                 # print isic
-    
-                # bra_isic_ras = ybi_ras[isic][bra]
-                # half_std = ybi_ras[isic].std() / 2
-    
-                # ras_similar = ((ybi_ras[isic] - bra_isic_ras) / ybi_ras[isic].std()).abs()
                 ras_similar = ras_similar_df[isic][ras_similar_df[isic] <= half_std[isic]]
                 
                 # max only use top 20% of all locations
                 max_cutoff = len(bras)*.2
-                max_cutoff = 100
+                max_cutoff = 50
                 ras_similar = ras_similar.order(ascending=False).index[:max_cutoff]
                 
                 if not len(ras_similar):
@@ -163,12 +127,6 @@ def main(year, delete_previous_file):
     
     ybio = ybio.set_index(["year", "bra_id", "isic_id", "cbo_id"])
     ybio["required"] = ybio_required["required"]
-    # ybio_required['year'] = ybio_required['year'].astype(int)
-    # ybio['year'] = ybio['year'].astype(int)
-    # ybio = pd.merge(ybio, ybio_required, on=["year", "bra_id", "isic_id", "cbo_id"], how="outer").fillna(0)
-    # print ybio.columns
-    
-    print ybio
         
     # print out file
     print "writing to file..."
