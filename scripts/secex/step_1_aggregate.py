@@ -16,7 +16,7 @@ from collections import defaultdict
 from os import environ
 from decimal import Decimal, ROUND_HALF_UP
 from ..config import DATA_DIR
-from ..helpers import d, get_file
+from ..helpers import d, get_file, format_runtime
 from scripts import YEAR
 
 ''' Connect to DB '''
@@ -231,7 +231,7 @@ if __name__ == "__main__":
     
     main(YEAR)
     
-    total_run_time = (time.time() - start) / 60
+    total_run_time = time.time() - start
     print; print;
-    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print "Total runtime: " + format_runtime(total_run_time)
     print; print;

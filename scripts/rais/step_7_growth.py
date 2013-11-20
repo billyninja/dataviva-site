@@ -12,7 +12,7 @@ from os import environ
 from os.path import basename, splitext
 import pandas as pd
 import numpy as np
-from ..helpers import get_file
+from ..helpers import get_file, format_runtime
 from ..config import DATA_DIR
 from ..growth_lib import growth
 from scripts import YEAR, DELETE_PREVIOUS_FILE, TABLE
@@ -58,22 +58,22 @@ def main(year, delete_previous_file, table):
     print "calculating 1 year wage growth value"
     s = time.time()
     current["wage_growth_val"] = current["wage"] - prev["wage"]
-    print (time.time() - s) / 60
+    print "  > Runtime: " + format_runtime(time.time() - s)
     
     print "calculating 1 year wage growth rate"
     s = time.time()
     current["wage_growth_rate"] = (current["wage"] / prev["wage"]) - 1
-    print (time.time() - s) / 60
+    print "  > Runtime: " + format_runtime(time.time() - s)
 
     print "calculating 1 year num_emp growth value"
     s = time.time()
     current["num_emp_growth_val"] = current["num_emp"] - prev["num_emp"]
-    print (time.time() - s) / 60
+    print "  > Runtime: " + format_runtime(time.time() - s)
 
     print "calculating 1 year num_emp growth rate"
     s = time.time()
     current["num_emp_growth_rate"] = (current["num_emp"] / prev["num_emp"]) - 1
-    print (time.time() - s) / 60
+    print "  > Runtime: " + format_runtime(time.time() - s)
     
     prev_5_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year_5, file_lookup[table]))
     prev_5_file = get_file(prev_5_file_path)
@@ -81,22 +81,31 @@ def main(year, delete_previous_file, table):
         f = splitext(basename(file_lookup[table]))[0] + "_growth.tsv"
         prev_5_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', prev_year_5, f))
         prev_5_file = get_file(prev_5_file_path)
+    
     if prev_5_file:
         print "loading file for 5 years ago"
         prev_5 = pd.read_csv(prev_5_file, sep="\t", converters=converters)
         prev_5 = prev_5.set_index(index_cols)
         
         print "calculating 5 year wage growth value"
+        s = time.time()
         current["wage_growth_val_5"] = current["wage"] - prev_5["wage"]
+        print "  > Runtime: " + format_runtime(time.time() - s)
     
         print "calculating 5 year wage growth rate"
+        s = time.time()
         current["wage_growth_rate_5"] = (current["wage"] / prev_5["wage"]) ** (1.0/5.0) - 1
+        print "  > Runtime: " + format_runtime(time.time() - s)
         
         print "calculating 5 year num_emp growth value"
+        s = time.time()
         current["num_emp_growth_val_5"] = current["num_emp"] - prev_5["num_emp"]
+        print "  > Runtime: " + format_runtime(time.time() - s)
     
         print "calculating 5 year num_emp growth rate"
+        s = time.time()
         current["num_emp_growth_rate_5"] = (current["num_emp"] / prev_5["num_emp"]) ** (1.0/5.0) - 1
+        print "  > Runtime: " + format_runtime(time.time() - s)
     
     new_file_name = splitext(basename(file_lookup[table]))[0] + "_growth.tsv.bz2"
     print "writing new growth file..."
@@ -112,7 +121,7 @@ if __name__ == "__main__":
     
     main(YEAR, DELETE_PREVIOUS_FILE, TABLE)
     
-    total_run_time = (time.time() - start) / 60
+    total_run_time = time.time() - start
     print; print;
-    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print "Total runtime: " + format_runtime(total_run_time)
     print; print;

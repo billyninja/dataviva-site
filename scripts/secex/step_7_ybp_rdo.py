@@ -10,7 +10,7 @@ import pandas as pd
 import pandas.io.sql as sql
 import numpy as np
 from ..config import DATA_DIR
-from ..helpers import get_file
+from ..helpers import get_file, format_runtime
 from ..growth_lib import growth
 from scripts import YEAR, DELETE_PREVIOUS_FILE
 
@@ -230,7 +230,7 @@ if __name__ == "__main__":
     
     main(YEAR, DELETE_PREVIOUS_FILE)
     
-    total_run_time = (time.time() - start) / 60
+    total_run_time = time.time() - start
     print; print;
-    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print "Total runtime: " + format_runtime(total_run_time)
     print; print;

@@ -11,7 +11,7 @@ from collections import defaultdict
 from os import environ
 import pandas as pd
 import numpy as np
-from ..helpers import get_file
+from ..helpers import get_file, format_runtime
 from ..config import DATA_DIR
 from ..growth_lib import growth
 from scripts import YEAR, DELETE_PREVIOUS_FILE
@@ -118,7 +118,7 @@ def main(year, delete_previous_file):
             yio_importance.append([year, isic, cbo, imp])
         
         # print year, cbo, time.time() - start
-        sys.stdout.write('\r ' + year + ' ' + cbo + ' '*10)
+        sys.stdout.write('\r ' + year + ' CBO id: ' + cbo + ' '*10)
         sys.stdout.flush() # important
     
     # now time to merge!
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     
     main(YEAR, DELETE_PREVIOUS_FILE)
     
-    total_run_time = (time.time() - start) / 60
+    total_run_time = time.time() - start
     print; print;
-    print "Total runtime: {0} minutes".format(int(total_run_time))
+    print "Total runtime: " + format_runtime(total_run_time)
     print; print;

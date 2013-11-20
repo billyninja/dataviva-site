@@ -33,3 +33,16 @@ def get_file(file_path):
     print "ERROR: unable to find file named {0}[.zip, .bz2, .gz] " \
             "in directory specified.".format(file_name)
     return None
+
+def format_runtime(x):
+    # convert to hours, minutes, seconds
+    m, s = divmod(x, 60)
+    h, m = divmod(m, 60)
+    if h:
+        return "{0} hours and {1} minutes".format(int(h), int(m))
+    if m:
+        return "{0} minutes and {1} seconds".format(int(m), int(s))
+    if s < 1:
+        return "< 1 second"
+    return "{0} seconds".format(int(s))
+        
