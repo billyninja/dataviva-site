@@ -137,7 +137,7 @@ def main(year, delete_previous_file):
     # print out file
     print "writing to file..."
     new_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio_required.tsv.bz2'))
-    ybio.to_csv(bz2.BZ2File(new_file_path, 'wb'), sep="\t", index=True)
+    ybio.to_csv(bz2.BZ2File(new_file_path, 'wb'), sep="\t", index=False)
     
     if delete_previous_file:
         print "deleting previous file"
