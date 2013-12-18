@@ -207,7 +207,7 @@ def main(year):
         line = dict(zip(header, line))
         
         if i % 100000 == 0 and i != 0:
-            sys.stdout.write('\r lines read: ' + str(i) + ' ' * 20)
+            sys.stdout.write('\r lines read: ' + '{:,}'.format(i) + ' ' * 20)
             sys.stdout.flush() # important
         
         data = var_names.copy()

@@ -109,25 +109,24 @@ def main(year, delete_previous_file):
         
         print
         print "total required rows added:", len(ybio_required)
-        
+    
     # merge
     print "merging datasets..."
     ybio_required = pd.DataFrame(ybio_required, columns=["year", "bra_id", "isic_id", "cbo_id", "required"])
     ybio_required['year'] = ybio_required['year'].astype(int)
-    # ybio['year'] = ybio['year'].astype(int)
-    # ybio = pd.merge(ybio, ybio_required, on=["year", "bra_id", "isic_id", "cbo_id"], how="outer").fillna(0)
-    # ybio["year"] = ybio["year_x"]
-    # ybio = ybio.drop(["year_y", "year_x"])
+    ybio['year'] = ybio['year'].astype(int)
+    ybio_required = pd.merge(ybio, ybio_required, on=["year", "bra_id", "isic_id", "cbo_id"], how="outer")
+    # ybio.replace(0, np.nan)
     print ybio_required.columns
         
     # print out file
     print "writing to file..."
-    new_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio_just_required.tsv.bz2'))
+    new_file_path = os.path.abspath(os.path.join(DATA_DIR, 'rais', year, 'ybio_required.tsv.bz2'))
     ybio_required.to_csv(bz2.BZ2File(new_file_path, 'wb'), sep="\t", index=False)
     
-    # if delete_previous_file:
-    #     print "deleting previous file"
-    #     os.remove(file.name)
+    if delete_previous_file:
+        print "deleting previous file"
+        os.remove(file.name)
 
 if __name__ == "__main__":
     start = time.time()

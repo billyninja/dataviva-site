@@ -83,11 +83,9 @@ def main(year):
     for i, line in enumerate(ybio_file_reader):
         
         line = dict(zip(header, line))
-        # print line
-        # sys.exit()
         
         if i % 100000 == 0:
-            sys.stdout.write('\r lines read: ' + str(i) + ' ' * 20)
+            sys.stdout.write('\r lines read: ' + '{:,}'.format(i) + ' ' * 20)
             sys.stdout.flush() # important
         
         if len(line["bra_id"]) == 8 and len(line["isic_id"]) == 5:
