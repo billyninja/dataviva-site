@@ -28,6 +28,8 @@ import random
 import zipfile
 import sys
 import gzip
+import re
+import uuid
 
 mod = Blueprint('apps', __name__, url_prefix='/apps')
 
@@ -344,7 +346,7 @@ def download():
     format = form.output_format.data
     title = form.title.data
     downloadToken = form.downloadToken.data
-    filenameDownload = title+"-"+downloadToken
+    filenameDownload = str(uuid.uuid4())#title+"-"+downloadToken
 
     
     
@@ -373,7 +375,6 @@ def download():
         out, err = p.communicate()
         response_data = out
     elif format == "url2csv":
-        urrll = data
         format = "csv"
         
         lang = request.args.get('lang', None) or g.locale
@@ -436,25 +437,24 @@ def download():
         response_data = data.encode("utf-16")
         #print response_data
     
-    
-    content_disposition = "attachment;filename=%s.%s" % (title, format)
+    content_disposition = "attachment;filename=%s.%s" % (filenameDownload, format)
     content_disposition = content_disposition.replace(",", "_")
-    
+
     download_file = make_response(Response(response_data,
                        mimetype=mimetype,
                         headers={"Content-Disposition": content_disposition}))
-    
-    with open(os.path.join(basedir, "dataviva/static/downloads/"+title+"."+format),"wb") as fo:
+
+    with open(os.path.join(basedir, "dataviva/static/downloads/"+filenameDownload+"."+format),"wb") as fo:
         fo.write(response_data)
-    
+
     zf = zipfile.ZipFile(os.path.join(basedir, "dataviva/static/downloads/"+filenameDownload+".zip"), mode='w')
     try:
-        zf.write(os.path.join(basedir, "dataviva/static/downloads/"+title+"."+format), title+"."+format)
+        zf.write(os.path.join(basedir, "dataviva/static/downloads/"+filenameDownload+"."+format), re.sub(r"[^0-9a-zA-Z\-_\.]", "-", title)+"."+format)
     finally:
         zf.close()
-    
-    os.remove(os.path.join(basedir, "dataviva/static/downloads/"+title+"."+format))
-        
+
+    os.remove(os.path.join(basedir, "dataviva/static/downloads/"+filenameDownload+"."+format))
+
     return "/static/downloads/"+filenameDownload+".zip"
 
 
