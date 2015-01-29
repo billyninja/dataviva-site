@@ -1,0 +1,138 @@
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Merriweather'),
+    url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+  @font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Merriweather'),
+        url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+    @font-face {
+      font-family: 'Merriweather';
+      font-style: normal;
+      font-weight: 700;
+      src: local('Merriweather Bold'), local('Merriweather-Bold'),
+            url(./fonts/oswald/Merriweather-Bold.otf) format('opentype');
+      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+      @font-face {
+        font-family: 'Merriweather';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Merriweather Bold'), local('Merriweather-Bold'),
+                url(./fonts/merriweather/Merriweather-Bold.otf) format('opentype');
+        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+        @font-face {
+          font-family: 'Merriweather';
+          font-style: italic;
+          font-weight: 400;
+          src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                    url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+          unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+          @font-face {
+            font-family: 'Merriweather';
+            font-style: italic;
+            font-weight: 400;
+            src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                        url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+            unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+            @font-face {
+              font-family: 'Merriweather';
+              font-style: italic;
+              font-weight: 700;
+              src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                            url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+              unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+              @font-face {
+                font-family: 'Merriweather';
+                font-style: italic;
+                font-weight: 700;
+                src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                                url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+                unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                @font-face {
+                  font-family: 'Oswald';
+                  font-style: normal;
+                  font-weight: 300;
+                  src: local('Oswald Light'), local('Oswald-Light'),
+                                    url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                  @font-face {
+                    font-family: 'Oswald';
+                    font-style: normal;
+                    font-weight: 300;
+                    src: local('Oswald Light'), local('Oswald-Light'),
+                                        url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                    @font-face {
+                      font-family: 'Oswald';
+                      font-style: normal;
+                      font-weight: 400;
+                      src: local('Oswald Regular'), local('Oswald-Regular'),
+                                            url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                      @font-face {
+                        font-family: 'Oswald';
+                        font-style: normal;
+                        font-weight: 400;
+                        src: local('Oswald Regular'), local('Oswald-Regular'),
+                                                url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                                U2212, U2215, UE0FF, UEFFD, UF000; }
+#featured {
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap; }
+  #featured .featured_link {
+    display: inline-block;
+    overflow: hidden;
+    width: 100%; }
+    #featured .pagination {
+      bottom: 10px;
+      left: 50%;
+      margin-left: -75px;
+      position: absolute;
+      text-align: center;
+      width: 150px;
+      z-index: 20; }
+      #featured .pagination .page_indicator {
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-transition: background-color 0.1s, opacity 0.1s;
+        -moz-transition: background-color 0.1s, opacity 0.1s;
+        -o-transition: background-color 0.1s, opacity 0.1s;
+        transition: background-color 0.1s, opacity 0.1s;
+        background-color: #fafafa;
+        display: inline-block;
+        height: 10px;
+        margin: 4px;
+        opacity: 0.5;
+        width: 10px; }
+        #featured .pagination .page_indicator:hover {
+          -webkit-transform: scale(1.25, 1.25);
+          -ms-transform: scale(1.25, 1.25);
+          transform: scale(1.25, 1.25);
+          cursor: pointer; }
+          #featured .pagination .page_indicator.active {
+            opacity: 1; }

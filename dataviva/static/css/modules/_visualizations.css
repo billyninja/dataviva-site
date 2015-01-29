@@ -1,0 +1,132 @@
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Merriweather'),
+    url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+  @font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Merriweather'),
+        url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+    @font-face {
+      font-family: 'Merriweather';
+      font-style: normal;
+      font-weight: 700;
+      src: local('Merriweather Bold'), local('Merriweather-Bold'),
+            url(./fonts/oswald/Merriweather-Bold.otf) format('opentype');
+      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+      @font-face {
+        font-family: 'Merriweather';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Merriweather Bold'), local('Merriweather-Bold'),
+                url(./fonts/merriweather/Merriweather-Bold.otf) format('opentype');
+        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+        @font-face {
+          font-family: 'Merriweather';
+          font-style: italic;
+          font-weight: 400;
+          src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                    url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+          unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+          @font-face {
+            font-family: 'Merriweather';
+            font-style: italic;
+            font-weight: 400;
+            src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                        url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+            unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+            @font-face {
+              font-family: 'Merriweather';
+              font-style: italic;
+              font-weight: 700;
+              src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                            url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+              unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+              @font-face {
+                font-family: 'Merriweather';
+                font-style: italic;
+                font-weight: 700;
+                src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                                url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+                unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                @font-face {
+                  font-family: 'Oswald';
+                  font-style: normal;
+                  font-weight: 300;
+                  src: local('Oswald Light'), local('Oswald-Light'),
+                                    url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                  @font-face {
+                    font-family: 'Oswald';
+                    font-style: normal;
+                    font-weight: 300;
+                    src: local('Oswald Light'), local('Oswald-Light'),
+                                        url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                    @font-face {
+                      font-family: 'Oswald';
+                      font-style: normal;
+                      font-weight: 400;
+                      src: local('Oswald Regular'), local('Oswald-Regular'),
+                                            url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                      @font-face {
+                        font-family: 'Oswald';
+                        font-style: normal;
+                        font-weight: 400;
+                        src: local('Oswald Regular'), local('Oswald-Regular'),
+                                                url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                                U2212, U2215, UE0FF, UEFFD, UF000; }
+.visualization_title {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  left: 50%;
+  margin-left: -300px;
+  max-width: 600px;
+  padding-bottom: 10px;
+  position: absolute;
+  top: 0;
+  z-index: 10; }
+
+  .visualization_ui {
+    margin-left: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10; }
+    .visualization_ui a {
+      display: inline-block;
+      margin: 5px 5px 5px 0; }
+      .visualization_ui i {
+        color: #aaaaaa;
+        height: 20px;
+        font-size: 16px;
+        line-height: 20px;
+        text-align: center;
+        width: 20px; }
+        .visualization_ui i:hover {
+          color: #af1f24;
+          cursor: pointer; }

@@ -1,0 +1,377 @@
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Merriweather'),
+    url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+  @font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Merriweather'),
+        url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+    @font-face {
+      font-family: 'Merriweather';
+      font-style: normal;
+      font-weight: 700;
+      src: local('Merriweather Bold'), local('Merriweather-Bold'),
+            url(./fonts/oswald/Merriweather-Bold.otf) format('opentype');
+      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+      @font-face {
+        font-family: 'Merriweather';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Merriweather Bold'), local('Merriweather-Bold'),
+                url(./fonts/merriweather/Merriweather-Bold.otf) format('opentype');
+        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+        @font-face {
+          font-family: 'Merriweather';
+          font-style: italic;
+          font-weight: 400;
+          src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                    url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+          unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+          @font-face {
+            font-family: 'Merriweather';
+            font-style: italic;
+            font-weight: 400;
+            src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                        url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+            unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+            @font-face {
+              font-family: 'Merriweather';
+              font-style: italic;
+              font-weight: 700;
+              src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                            url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+              unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+              @font-face {
+                font-family: 'Merriweather';
+                font-style: italic;
+                font-weight: 700;
+                src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                                url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+                unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                @font-face {
+                  font-family: 'Oswald';
+                  font-style: normal;
+                  font-weight: 300;
+                  src: local('Oswald Light'), local('Oswald-Light'),
+                                    url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                  @font-face {
+                    font-family: 'Oswald';
+                    font-style: normal;
+                    font-weight: 300;
+                    src: local('Oswald Light'), local('Oswald-Light'),
+                                        url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                    @font-face {
+                      font-family: 'Oswald';
+                      font-style: normal;
+                      font-weight: 400;
+                      src: local('Oswald Regular'), local('Oswald-Regular'),
+                                            url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                      @font-face {
+                        font-family: 'Oswald';
+                        font-style: normal;
+                        font-weight: 400;
+                        src: local('Oswald Regular'), local('Oswald-Regular'),
+                                                url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                                U2212, U2215, UE0FF, UEFFD, UF000; }
+main {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  margin: 0; }
+
+  section {
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    flex-direction: row;
+    margin: 20px auto 80px;
+    padding: 0 40px;
+    position: relative;
+    text-align: left; }
+    section > section {
+      -webkit-box-flex: 1;
+      -moz-box-flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      margin: 0 auto;
+      padding: 0 40px 0 40px; }
+
+.paralax {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-image: url("/static/img/bgs/triangles_grey.png");
+  background-position: top center;
+  display: block;
+  margin: 0;
+  padding: 10px 0;
+  position: relative;
+  text-align: center;
+  width: 100%; }
+  .paralax h1 {
+    margin: 5px; }
+    .paralax.image {
+      padding: 20px 0;
+      text-shadow: 0 0 10px black; }
+      .paralax.image .background {
+        overflow: hidden; }
+        .paralax.image h1 {
+          margin: 20px; }
+          .paralax.image h1, .paralax.image h4 {
+            color: #fafafa; }
+  .paralax > section {
+    padding-right: 0; }
+    .paralax * {
+      position: relative;
+      z-index: 20; }
+
+.background {
+  background-position: top center;
+  background-size: 100%;
+  left: 0;
+  height: 100%;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  width: 100%; }
+  .background img {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -ms-filter: blur(5px);
+    -o-filter: blur(5px);
+    filter: url(blur.svg#blur);
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='5');
+    left: 0;
+    margin-left: -10px;
+    margin-top: -10px;
+    position: absolute;
+    top: 0%;
+    width: 105%;
+    z-index: 1; }
+    .background:before {
+      background: rgba(0, 0, 0, 0.3);
+      content: "";
+      display: block;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 2; }
+
+div.headlines {
+  padding: 0 0 10px;
+  position: relative;
+  z-index: 50; }
+  div.headlines .labels, div.headlines .bubbles, div.headlines .units {
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    flex-direction: row; }
+    div.headlines .labels > *, div.headlines .bubbles > *, div.headlines .units > * {
+      margin: 0;
+      width: 150px; }
+      div.headlines .labels h4, div.headlines .labels h5, div.headlines .bubbles h4,
+      div.headlines .bubbles h5, div.headlines .units h4, div.headlines .units h5 {
+        color: #fafafa;
+        text-shadow: 0 0 10px black; }
+  div.headlines .labels, div.headlines .units {
+    -webkit-align-items: center;
+    align-items: center;
+    height: 42px; }
+    div.headlines .statLink:hover div, div.headlines .statLink:hover h4,
+    div.headlines .statLink:hover h5 {
+      text-decoration: underline; }
+  div.headlines .stat {
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 40px;
+    background-color: #444444;
+    color: #fafafa;
+    font-family: "Oswald", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    height: 80px;
+    margin: 5px auto;
+    padding: 5px;
+    text-align: center;
+    text-shadow: none;
+    width: 80px; }
+    div.headlines .stat.large {
+      font-size: 24px; }
+      div.headlines .stat > div {
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        display: inline-block; }
+
+main.sidebar {
+  margin-left: 250px; }
+  main.sidebar .headlines {
+    margin-bottom: -114px; }
+    main.sidebar .headlines .units h4, main.sidebar .headlines .units h5 {
+      color: #444444;
+      text-shadow: none; }
+
+@media (max-width: 640px) {
+  section {
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    flex-direction: column;   }
+}
+
+#server_message {
+  background-color: #af1f24;
+  bottom: -24px;
+  color: white;
+  position: absolute;
+  padding: 5px 0px;
+  text-align: center;
+  width: 100%;
+  z-index: 200; }
+
+  .accordion .hidden {
+    background-color: white;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: transparent transparent transparent #aaaaaa;
+    display: none;
+    margin-bottom: 10px;
+    padding: 20px 20px 0 20px; }
+    .accordion .decision {
+      padding-right: 24px; }
+      .accordion .decision:after {
+        -webkit-transition: transform 0.1s, margin-top 0.1s;
+        -moz-transition: transform 0.1s, margin-top 0.1s;
+        -o-transition: transform 0.1s, margin-top 0.1s;
+        transition: transform 0.1s, margin-top 0.1s;
+        background-position: 40%;
+        background-repeat: no-repeat;
+        background-size: auto 80%;
+        content: "";
+        display: block;
+        font-family: FontAwesome;
+        -webkit-font-smoothing: antialiased;
+        font-style: normal;
+        font-weight: 400;
+        position: absolute;
+        text-align: center;
+        text-decoration: inherit;
+        content: "\f105";
+        font-size: 20px;
+        line-height: 0px;
+        margin-top: -1px;
+        top: 50%;
+        right: 0;
+        width: 24px; }
+  .accordion.active .decision {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    margin-bottom: 0; }
+    .accordion.active .decision:hover {
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none; }
+      .accordion.active .decision:after {
+        -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
+        -webkit-transform-origin: 50%;
+        -ms-transform-origin: 50%;
+        transform-origin: 50%;
+        margin-top: 1px; }
+  .accordion.active .hidden {
+    display: block; }
+
+.lightbox {
+  -webkit-box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+  background-color: white;
+  position: fixed;
+  z-index: 500; }
+
+  .shield {
+    background-color: white;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    opacity: 0.5;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 499; }
+
+    .loading {
+      color: #af1f24;
+      padding: 20px 0;
+      position: relative;
+      text-align: center;
+      width: 100%;
+      z-index: 10; }
+      .loading i {
+        display: block;
+        font-size: 47.5px;
+        left: 50%;
+        margin-left: -50px;
+        margin-top: 4px;
+        opacity: 0.25;
+        position: absolute;
+        top: 23px;
+        width: 100px;
+        z-index: 1; }

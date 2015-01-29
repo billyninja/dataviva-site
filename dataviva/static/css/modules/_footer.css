@@ -1,0 +1,41 @@
+footer {
+  margin: 20px auto;
+  text-align: center; }
+
+  a.opendata {
+    display: inline-block;
+    margin: 13px 10px 11px 5px;
+    opacity: 0.5;
+    -webkit-transition: opacity 0.1s;
+    transition: opacity 0.1s; }
+
+    a.opendata:hover {
+      opacity: 1; }
+
+      a.logo {
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-position: center center;
+        display: inline-block;
+        height: 29px;
+        margin: 5px;
+        opacity: 0.75;
+        width: 77px; }
+
+        a.logo:hover {
+          opacity: 1; }
+
+          a.logo.fjp {
+            background-image: url("/static/img/nav/footer/logo_fjp.jpg"); }
+
+            a.logo.fapemig {
+              background-image: url("/static/img/nav/footer/logo_fapemig.jpg"); }
+
+              a.logo.governo {
+                background-image: url("/static/img/nav/footer/logo_governo.jpg"); }
+
+                a.logo.mc {
+                  background-image: url("/static/img/nav/footer/logo_mc.jpg"); }
+
+                  a.logo.datawheel {
+                    background-image: url("/static/img/nav/footer/logo_datawheel.jpg"); }

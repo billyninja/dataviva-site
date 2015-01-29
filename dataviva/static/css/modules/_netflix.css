@@ -1,0 +1,203 @@
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Merriweather'),
+    url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+  @font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Merriweather'),
+        url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+    @font-face {
+      font-family: 'Merriweather';
+      font-style: normal;
+      font-weight: 700;
+      src: local('Merriweather Bold'), local('Merriweather-Bold'),
+            url(./fonts/oswald/Merriweather-Bold.otf) format('opentype');
+      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+      @font-face {
+        font-family: 'Merriweather';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Merriweather Bold'), local('Merriweather-Bold'),
+                url(./fonts/merriweather/Merriweather-Bold.otf) format('opentype');
+        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+        @font-face {
+          font-family: 'Merriweather';
+          font-style: italic;
+          font-weight: 400;
+          src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                    url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+          unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+          @font-face {
+            font-family: 'Merriweather';
+            font-style: italic;
+            font-weight: 400;
+            src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                        url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+            unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+            @font-face {
+              font-family: 'Merriweather';
+              font-style: italic;
+              font-weight: 700;
+              src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                            url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+              unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+              @font-face {
+                font-family: 'Merriweather';
+                font-style: italic;
+                font-weight: 700;
+                src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                                url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+                unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                @font-face {
+                  font-family: 'Oswald';
+                  font-style: normal;
+                  font-weight: 300;
+                  src: local('Oswald Light'), local('Oswald-Light'),
+                                    url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                  @font-face {
+                    font-family: 'Oswald';
+                    font-style: normal;
+                    font-weight: 300;
+                    src: local('Oswald Light'), local('Oswald-Light'),
+                                        url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                    @font-face {
+                      font-family: 'Oswald';
+                      font-style: normal;
+                      font-weight: 400;
+                      src: local('Oswald Regular'), local('Oswald-Regular'),
+                                            url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                      @font-face {
+                        font-family: 'Oswald';
+                        font-style: normal;
+                        font-weight: 400;
+                        src: local('Oswald Regular'), local('Oswald-Regular'),
+                                                url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                                U2212, U2215, UE0FF, UEFFD, UF000; }
+.list {
+  display: block;
+  padding: 0; }
+  .list > div {
+    margin: 0 40px; }
+    .list .prev, .list .next {
+      background-position: 40%;
+      background-repeat: no-repeat;
+      background-size: auto 80%;
+      content: "";
+      display: block;
+      font-family: FontAwesome;
+      -webkit-font-smoothing: antialiased;
+      font-style: normal;
+      font-weight: 400;
+      position: absolute;
+      text-align: center;
+      text-decoration: inherit;
+      -webkit-transition: opacity 0.75s, color 0.1s;
+      -moz-transition: opacity 0.75s, color 0.1s;
+      -o-transition: opacity 0.75s, color 0.1s;
+      transition: opacity 0.75s, color 0.1s;
+      color: #aaaaaa;
+      font-size: 50px;
+      line-height: 215px;
+      opacity: 1;
+      width: 40px; }
+      .list .prev:hover, .list .next:hover {
+        color: #af1f24; }
+        .list .prev.disabled, .list .next.disabled {
+          cursor: auto;
+          opacity: 0; }
+  .list .prev {
+    left: 0; }
+    .list .prev:before {
+      content: "\f104"; }
+  .list .next {
+    right: 0; }
+    .list .next:before {
+      content: "\f105"; }
+  .list .scroller {
+    overflow: hidden;
+    position: relative; }
+    .list .scroller .page {
+      -webkit-transition: 0.75s ease-in-out;
+      -moz-transition: 0.75s ease-in-out;
+      -o-transition: 0.75s ease-in-out;
+      transition: 0.75s ease-in-out;
+      list-style-type: none;
+      white-space: nowrap; }
+      .list .scroller .page li {
+        display: inline-block; }
+
+.poster {
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.49);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.49);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.49);
+  -webkit-transition: background-position 0.1s;
+  -moz-transition: background-position 0.1s;
+  -o-transition: background-position 0.1s;
+  transition: background-position 0.1s;
+  background-color: #eeeeee;
+  background-position: center top;
+  background-size: auto 110%;
+  box-siizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  height: 200px;
+  margin: 5px;
+  overflow: hidden;
+  position: relative;
+  width: 150px; }
+  .poster:hover {
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.75);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.75); }
+    .poster .title {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      bottom: 0;
+      color: #444444;
+      display: block;
+      margin: 0;
+      overflow: hidden;
+      padding: 6px 8px 8px;
+      position: absolute;
+      width: 100%;
+      white-space: normal;
+      z-index: 20; }
+      .poster .icon {
+        bottom: 10px;
+        height: 30px;
+        position: absolute;
+        right: 10px;
+        width: 30px; }
+        .poster .icon img {
+          width: 100%; }
+  .poster:hover {
+    background-position: center bottom; }
+    .poster:hover .background > img {
+      height: 120%; }

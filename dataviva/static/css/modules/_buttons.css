@@ -1,0 +1,492 @@
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Merriweather'),
+    url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+  @font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Merriweather'),
+        url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+    @font-face {
+      font-family: 'Merriweather';
+      font-style: normal;
+      font-weight: 700;
+      src: local('Merriweather Bold'), local('Merriweather-Bold'),
+            url(./fonts/oswald/Merriweather-Bold.otf) format('opentype');
+      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+      @font-face {
+        font-family: 'Merriweather';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Merriweather Bold'), local('Merriweather-Bold'),
+                url(./fonts/merriweather/Merriweather-Bold.otf) format('opentype');
+        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+        @font-face {
+          font-family: 'Merriweather';
+          font-style: italic;
+          font-weight: 400;
+          src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                    url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+          unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+          @font-face {
+            font-family: 'Merriweather';
+            font-style: italic;
+            font-weight: 400;
+            src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                        url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+            unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+            @font-face {
+              font-family: 'Merriweather';
+              font-style: italic;
+              font-weight: 700;
+              src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                            url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+              unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+              @font-face {
+                font-family: 'Merriweather';
+                font-style: italic;
+                font-weight: 700;
+                src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                                url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+                unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                @font-face {
+                  font-family: 'Oswald';
+                  font-style: normal;
+                  font-weight: 300;
+                  src: local('Oswald Light'), local('Oswald-Light'),
+                                    url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                  @font-face {
+                    font-family: 'Oswald';
+                    font-style: normal;
+                    font-weight: 300;
+                    src: local('Oswald Light'), local('Oswald-Light'),
+                                        url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                    @font-face {
+                      font-family: 'Oswald';
+                      font-style: normal;
+                      font-weight: 400;
+                      src: local('Oswald Regular'), local('Oswald-Regular'),
+                                            url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                      @font-face {
+                        font-family: 'Oswald';
+                        font-style: normal;
+                        font-weight: 400;
+                        src: local('Oswald Regular'), local('Oswald-Regular'),
+                                                url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                                U2212, U2215, UE0FF, UEFFD, UF000; }
+a {
+  text-decoration: none;
+  color: #444444; }
+
+  a:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color: #aaaaaa; }
+
+    .decision {
+      color: #666666;
+      display: block;
+      font-size: 16px;
+      line-height: 19.2px;
+      margin: 0 0 10px;
+      opacity: 0.75;
+      overflow: hidden;
+      padding: 8px 0;
+      position: relative;
+      text-align: left;
+      text-overflow: ellipsis; }
+      .decision.active {
+        color: #af1f24;
+        opacity: 1; }
+        .decision.button {
+          -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.17);
+          -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.17);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.17);
+          background-color: #af1f24;
+          color: white;
+          padding: 8px 9.6px; }
+          .decision.button:hover {
+            -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+            -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25); }
+      .decision:hover {
+        cursor: pointer;
+        opacity: 1; }
+        .decision.arrow {
+          padding-right: 24px; }
+          .decision.arrow:after {
+            -webkit-transition: transform 0.1s, margin-top 0.1s;
+            -moz-transition: transform 0.1s, margin-top 0.1s;
+            -o-transition: transform 0.1s, margin-top 0.1s;
+            transition: transform 0.1s, margin-top 0.1s;
+            background-position: 40%;
+            background-repeat: no-repeat;
+            background-size: auto 80%;
+            content: "";
+            display: block;
+            font-family: FontAwesome;
+            -webkit-font-smoothing: antialiased;
+            font-style: normal;
+            font-weight: 400;
+            position: absolute;
+            text-align: center;
+            text-decoration: inherit;
+            content: "\f105";
+            font-size: 20px;
+            line-height: 0px;
+            margin-top: -1px;
+            top: 50%;
+            right: 0;
+            width: 24px; }
+      .decision.small {
+        font-size: 11.85px;
+        line-height: 14.22px;
+        margin: 5px;
+        padding: 5.925px 7.11px; }
+        .decision.inline {
+          display: inline-block;
+          margin: 0 16px; }
+
+.decision.icon {
+  padding-left: 32px; }
+  .decision.icon:before {
+    background-position: 40%;
+    background-repeat: no-repeat;
+    background-size: auto 80%;
+    content: "";
+    display: block;
+    font-family: FontAwesome;
+    -webkit-font-smoothing: antialiased;
+    font-style: normal;
+    font-weight: 400;
+    position: absolute;
+    text-align: center;
+    text-decoration: inherit;
+    font-size: 16px;
+    height: 32px;
+    line-height: 33px;
+    margin-top: -17px;
+    color: black;
+    left: 0;
+    opacity: 0.5;
+    top: 50%;
+    width: 26px; }
+    .decision.icon.active:before {
+      color: #af1f24;
+      opacity: 1; }
+      .decision.icon.button {
+        opacity: 1; }
+        .decision.icon.button:hover {
+          -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+          -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5); }
+          .decision.icon.button:before {
+            color: white;
+            opacity: 1;
+            width: 32px; }
+  .decision.icon.small {
+    padding-left: 23.7px; }
+    .decision.icon.small:before {
+      font-size: 11.85px;
+      height: 23.7px;
+      line-height: 22.7px;
+      margin-top: -10.85px;
+      width: 23.7px; }
+
+.decision.icon.approved:before {
+  content: "\f00c"; }
+
+  .decision.icon.attract:before {
+    content: "\f0c0"; }
+
+    .decision.icon.bra:before {
+      content: "\f124"; }
+
+      .decision.icon.comtrade:before {
+        content: "\f0ac"; }
+
+        .decision.icon.cbo:before {
+          content: "\f007"; }
+
+          .decision.icon.cnae:before {
+            content: "\f1ad"; }
+
+            .decision.icon.csv:before {
+              content: "\f1c3"; }
+
+              .decision.icon.database:before {
+                content: "\f022"; }
+
+                .decision.icon.destinations:before {
+                  content: "\f0ac"; }
+
+                  .decision.icon.diversification:before {
+                    content: "\f074"; }
+
+                    .decision.icon.duplicate:before {
+                      content: "\f086"; }
+
+                      .decision.icon.growth:before {
+                        content: "\f062"; }
+
+                        .decision.icon.hs:before {
+                          content: "\f0d1"; }
+
+                          .decision.icon.industry:before {
+                            content: "\f085"; }
+
+                            .decision.icon.isic:before {
+                              content: "\f1ad"; }
+
+                              .decision.icon.ncm:before {
+                                content: "\f0d1"; }
+
+                                .decision.icon.no:before {
+                                  content: "\f128"; }
+
+                                  .decision.icon.opportunity:before {
+                                    content: "\f140"; }
+
+                                    .decision.icon.paths:before {
+                                      content: "\f0c0"; }
+
+                                      .decision.icon.pdf:before {
+                                        content: "\f1c1"; }
+
+                                        .decision.icon.png:before {
+                                          content: "\f1c5"; }
+
+                                          .decision.icon.pending:before {
+                                            content: "\f06a"; }
+
+                                            .decision.icon.questions:before {
+                                              content: "\f075"; }
+
+                                              .decision.icon.rejected:before {
+                                                content: "\f00d"; }
+
+                                                .decision.icon.shrink:before {
+                                                  content: "\f063"; }
+
+                                                  .decision.icon.source:before {
+                                                    content: "\f14e"; }
+
+                                                    .decision.icon.svg:before {
+                                                      content: "\f1c9"; }
+
+                                                      .decision.icon.rais:before {
+                                                        content: "\f0c0"; }
+
+                                                        .decision.icon.replies:before {
+                                                          content: "\f112"; }
+
+                                                          .decision.icon.reply:before {
+                                                            content: "\f112"; }
+
+                                                            .decision.icon.secex:before {
+                                                              content: "\f0d1"; }
+
+                                                              .decision.icon.wages:before {
+                                                                content: "\f0d6"; }
+
+                                                                .decision.icon.wld:before {
+                                                                  content: "\f072"; }
+
+                                                                  .decision.icon.workforce:before {
+                                                                    content: "\f0c0"; }
+
+                                                                    .decision.icon.yes:before {
+                                                                      content: "\f00c"; }
+
+                                                                      .decision.bar.active {
+                                                                        color: #93789e !important; }
+                                                                        .decision.bar.button {
+                                                                          background-color: #93789e !important; }
+
+.decision.icon.bar:before {
+  background-image: url("/static/img/icons/app/bar_black.png"); }
+
+  .decision.icon.active.bar:before {
+    background-image: url("/static/img/icons/app/bar_color.png"); }
+
+    .decision.icon.button.bar:before {
+      background-image: url("/static/img/icons/app/bar_white.png"); }
+
+      .decision.box.active {
+        color: #b7834b !important; }
+        .decision.box.button {
+          background-color: #b7834b !important; }
+
+.decision.icon.box:before {
+  background-image: url("/static/img/icons/app/box_black.png"); }
+
+  .decision.icon.active.box:before {
+    background-image: url("/static/img/icons/app/box_color.png"); }
+
+    .decision.icon.button.box:before {
+      background-image: url("/static/img/icons/app/box_white.png"); }
+
+      .decision.compare.active {
+        color: #1abbee !important; }
+        .decision.compare.button {
+          background-color: #1abbee !important; }
+
+.decision.icon.compare:before {
+  background-image: url("/static/img/icons/app/compare_black.png"); }
+
+  .decision.icon.active.compare:before {
+    background-image: url("/static/img/icons/app/compare_color.png"); }
+
+    .decision.icon.button.compare:before {
+      background-image: url("/static/img/icons/app/compare_white.png"); }
+
+      .decision.geo_map.active {
+        color: #3daf49 !important; }
+        .decision.geo_map.button {
+          background-color: #3daf49 !important; }
+
+.decision.icon.geo_map:before {
+  background-image: url("/static/img/icons/app/geo_map_black.png"); }
+
+  .decision.icon.active.geo_map:before {
+    background-image: url("/static/img/icons/app/geo_map_color.png"); }
+
+    .decision.icon.button.geo_map:before {
+      background-image: url("/static/img/icons/app/geo_map_white.png"); }
+
+      .decision.line.active {
+        color: #a4bd99 !important; }
+        .decision.line.button {
+          background-color: #a4bd99 !important; }
+
+.decision.icon.line:before {
+  background-image: url("/static/img/icons/app/line_black.png"); }
+
+  .decision.icon.active.line:before {
+    background-image: url("/static/img/icons/app/line_color.png"); }
+
+    .decision.icon.button.line:before {
+      background-image: url("/static/img/icons/app/line_white.png"); }
+
+      .decision.network.active {
+        color: #af1f24 !important; }
+        .decision.network.button {
+          background-color: #af1f24 !important; }
+
+.decision.icon.network:before {
+  background-image: url("/static/img/icons/app/network_black.png"); }
+
+  .decision.icon.active.network:before {
+    background-image: url("/static/img/icons/app/network_color.png"); }
+
+    .decision.icon.button.network:before {
+      background-image: url("/static/img/icons/app/network_white.png"); }
+
+      .decision.occugrid.active {
+        color: #e87600 !important; }
+        .decision.occugrid.button {
+          background-color: #e87600 !important; }
+
+.decision.icon.occugrid:before {
+  background-image: url("/static/img/icons/app/occugrid_black.png"); }
+
+  .decision.icon.active.occugrid:before {
+    background-image: url("/static/img/icons/app/occugrid_color.png"); }
+
+    .decision.icon.button.occugrid:before {
+      background-image: url("/static/img/icons/app/occugrid_white.png"); }
+
+      .decision.pie.active {
+        color: #800000 !important; }
+        .decision.pie.button {
+          background-color: #800000 !important; }
+
+.decision.icon.pie:before {
+  background-image: url("/static/img/icons/app/pie_black.png"); }
+
+  .decision.icon.active.pie:before {
+    background-image: url("/static/img/icons/app/pie_color.png"); }
+
+    .decision.icon.button.pie:before {
+      background-image: url("/static/img/icons/app/pie_white.png"); }
+
+      .decision.rings.active {
+        color: #d67ab0 !important; }
+        .decision.rings.button {
+          background-color: #d67ab0 !important; }
+
+.decision.icon.rings:before {
+  background-image: url("/static/img/icons/app/rings_black.png"); }
+
+  .decision.icon.active.rings:before {
+    background-image: url("/static/img/icons/app/rings_color.png"); }
+
+    .decision.icon.button.rings:before {
+      background-image: url("/static/img/icons/app/rings_white.png"); }
+
+      .decision.scatter.active {
+        color: #0b1097 !important; }
+        .decision.scatter.button {
+          background-color: #0b1097 !important; }
+
+.decision.icon.scatter:before {
+  background-image: url("/static/img/icons/app/scatter_black.png"); }
+
+  .decision.icon.active.scatter:before {
+    background-image: url("/static/img/icons/app/scatter_color.png"); }
+
+    .decision.icon.button.scatter:before {
+      background-image: url("/static/img/icons/app/scatter_white.png"); }
+
+      .decision.stacked.active {
+        color: #742777 !important; }
+        .decision.stacked.button {
+          background-color: #742777 !important; }
+
+.decision.icon.stacked:before {
+  background-image: url("/static/img/icons/app/stacked_black.png"); }
+
+  .decision.icon.active.stacked:before {
+    background-image: url("/static/img/icons/app/stacked_color.png"); }
+
+    .decision.icon.button.stacked:before {
+      background-image: url("/static/img/icons/app/stacked_white.png"); }
+
+      .decision.tree_map.active {
+        color: #ffc41c !important; }
+        .decision.tree_map.button {
+          background-color: #ffc41c !important; }
+
+.decision.icon.tree_map:before {
+  background-image: url("/static/img/icons/app/tree_map_black.png"); }
+
+  .decision.icon.active.tree_map:before {
+    background-image: url("/static/img/icons/app/tree_map_color.png"); }
+
+    .decision.icon.button.tree_map:before {
+      background-image: url("/static/img/icons/app/tree_map_white.png"); }

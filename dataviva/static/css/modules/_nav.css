@@ -1,0 +1,254 @@
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Merriweather'),
+    url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+  @font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Merriweather'),
+        url(./fonts/merriweather/Merriweather-Regular.otf) format('opentype');
+    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+    @font-face {
+      font-family: 'Merriweather';
+      font-style: normal;
+      font-weight: 700;
+      src: local('Merriweather Bold'), local('Merriweather-Bold'),
+            url(./fonts/oswald/Merriweather-Bold.otf) format('opentype');
+      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+      @font-face {
+        font-family: 'Merriweather';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Merriweather Bold'), local('Merriweather-Bold'),
+                url(./fonts/merriweather/Merriweather-Bold.otf) format('opentype');
+        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+        @font-face {
+          font-family: 'Merriweather';
+          font-style: italic;
+          font-weight: 400;
+          src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                    url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+          unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+          @font-face {
+            font-family: 'Merriweather';
+            font-style: italic;
+            font-weight: 400;
+            src: local('Merriweather Italic'), local('Merriweather-Italic'),
+                        url(./fonts/merriweather/Merriweather-Italic.otf) format('opentype');
+            unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+            @font-face {
+              font-family: 'Merriweather';
+              font-style: italic;
+              font-weight: 700;
+              src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                            url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+              unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+              @font-face {
+                font-family: 'Merriweather';
+                font-style: italic;
+                font-weight: 700;
+                src: local('Merriweather Bold Italic'), local('Merriweather-BoldItalic'),
+                                url(./fonts/merriweather/Merriweather-BoldItalic.otf) format('opentype');
+                unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                @font-face {
+                  font-family: 'Oswald';
+                  font-style: normal;
+                  font-weight: 300;
+                  src: local('Oswald Light'), local('Oswald-Light'),
+                                    url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                  unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                  @font-face {
+                    font-family: 'Oswald';
+                    font-style: normal;
+                    font-weight: 300;
+                    src: local('Oswald Light'), local('Oswald-Light'),
+                                        url(./fonts/oswald/Oswald-Light.otf) format('opentype');
+                    unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                        U2212, U2215, UE0FF, UEFFD, UF000; }
+
+                    @font-face {
+                      font-family: 'Oswald';
+                      font-style: normal;
+                      font-weight: 400;
+                      src: local('Oswald Regular'), local('Oswald-Regular'),
+                                            url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                      unicode-range: U100 -24f, U1 E00-1EFF, U20 A0-20AB, U20 AD-20CF, U2 C60-2C7F, UA720-A7FF; }
+
+                      @font-face {
+                        font-family: 'Oswald';
+                        font-style: normal;
+                        font-weight: 400;
+                        src: local('Oswald Regular'), local('Oswald-Regular'),
+                                                url(./fonts/oswald/Oswald-Regular.otf) format('opentype');
+                        unicode-range: U0 0ff, U131, U152 -153, U2 C6, U2da, U2dc, U2000 -206f, U2074, U20ac,
+                                                U2212, U2215, UE0FF, UEFFD, UF000; }
+#logo {
+  background-image: url("/static/img/nav/DataViva.png");
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: bottom left;
+  height: 45px;
+  margin: 10px 0;
+  width: 150px; }
+
+  header {
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    justify-content: space-between;
+    background-color: #fafafa;
+    height: 65px;
+    margin: 0 40px;
+    z-index: 100; }
+    header #links {
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      justify-content: center;
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-align-items: center;
+      align-items: center;
+      margin: 10px 0; }
+      header #links > * {
+        margin: 0 15px; }
+        header #links .link {
+          display: inline-block;
+          font-family: "Oswald", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+          font-size: 14px;
+          font-weight: 400; }
+          header #links .link:hover {
+            color: #af1f24; }
+      header #links #search {
+        margin-right: 0;
+        position: relative;
+        width: 180px; }
+        header #links #search i {
+          color: #aaaaaa;
+          left: 6px;
+          position: absolute;
+          top: 8px;
+          z-index: 50; }
+          header #links #search input {
+            display: inline-block;
+            padding-left: 20px; }
+            header #links #search .twitter-typeahead, header #links #search .tt-hint {
+              width: 100%; }
+              header #links #search .tt-dropdown-menu {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                background-color: white;
+                border: 1px solid #aaaaaa;
+                overflow-y: scroll;
+                margin-top: -1px;
+                text-align: left;
+                width: 100%; }
+                header #links #search .tt-dropdown-menu .tt-suggestion {
+                  cursor: pointer;
+                  font-family: "Oswald", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+                  font-size: 14px;
+                  font-weight: 300;
+                  line-height: 16px;
+                  margin: 0;
+                  padding: 4px 6px; }
+                  header #links #search .tt-dropdown-menu .tt-suggestion.tt-cursor {
+                    background-color: #eeeeee; }
+                    header #links #search .tt-dropdown-menu .tt-suggestion .title,
+                    header #links #search .tt-dropdown-menu .tt-suggestion .sub {
+                      display: block; }
+                      header #links #search .tt-dropdown-menu .tt-suggestion .title {
+                        margin-bottom: 2px; }
+                        header #links #search .tt-dropdown-menu .tt-suggestion .title .icon {
+                          display: inline-block;
+                          height: 16px;
+                          margin-right: 6px;
+                          margin-top: -1px;
+                          width: 16px; }
+                          header #links #search .tt-dropdown-menu .tt-suggestion .title .icon img {
+                            width: 100%; }
+                        header #links #search .tt-dropdown-menu .tt-suggestion .title .tt-highlight {
+                          font-weight: 400;
+                          line-height: 13px; }
+                  header #links #search .tt-dropdown-menu .tt-suggestion .sub {
+                    font-size: 12px; }
+                    header #links #search .tt-dropdown-menu .tt-suggestion .sub .tt-highlight {
+                      font-weight: 400;
+                      line-height: 14px; }
+
+header.sidebar {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #aaaaaa;
+  display: block;
+  height: 100vh;
+  left: 0;
+  margin: 0;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  width: 250px; }
+  header.sidebar #logo {
+    display: block;
+    margin: 0 auto; }
+    header.sidebar #links {
+      display: block;
+      text-align: center;
+      margin: 0 25px; }
+      header.sidebar #links .link {
+        margin: 0 10px; }
+        header.sidebar #links #search {
+          display: block;
+          margin: 20px 0 10px;
+          width: 100%; }
+  header.sidebar ul {
+    list-style-type: none; }
+    header.sidebar ul li {
+      font-family: "Oswald", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+      padding: 1px 25px 3px; }
+      header.sidebar ul li.depth_0 {
+        font-size: 24px;
+        font-weight: 400;
+        margin: 14px 0 -4px; }
+        header.sidebar ul li.depth_1 {
+          font-size: 18px;
+          font-weight: 400;
+          margin: 14px 0 3px; }
+          header.sidebar ul li.depth_2 {
+            font-size: 14px;
+            font-weight: 400;
+            margin: 5px 0; }
+            header.sidebar ul li.depth_3 {
+              font-size: 13px;
+              font-weight: 300;
+              margin: 2px 0;
+              padding-left: 37px; }
