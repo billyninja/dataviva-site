@@ -2,7 +2,12 @@
 {% extends "templates/base.html" %}
 
 {% block content %}
-
+<link type="text/css" rel="stylesheet" href="/static/js/libs/tooltipster/css/tooltipster.css">
+<script src="/static/js/libs/jquery-2.0.3.min.js"></script>
+<script
+ type="text/javascript"
+ src="/static/js/libs/tooltipster/js/jquery.tooltipster.min.js">
+</script>
   <div id="header_container" class="lightbox">
     <div id="header">
 
@@ -12,6 +17,7 @@
     </div>
       <a id="logo" href="{{ url_for('general.home') }}"></a>
       <a id="apps" href="{{ url_for('apps.guide') }}" class="link{% if g.page_type == 'apps' or g.page_type == 'builder' %} active{% endif %}">{% trans %}Apps{% endtrans %}</a>
+      <div class="notice tooltip"  title="Dados atualizados:<br/><li>Exportações (2014)<li>Emprego formal (2013)">2</div>
       <a id="profiles" href="{{ url_for('profiles.index') }}" class="link{% if g.page_type == 'profiles' or g.page_type == 'profile' %} active{% endif %}">{% trans %}Profiles{% endtrans %}</a>
       <a id="guide" href="{{ url_for('guide.guide') }}" class="link{% if g.page_type == 'guide' or g.page_type == 'plan' %} active{% endif %}">{% trans %}Guide{% endtrans %}</a>
       <a id="data" href="{{ url_for('data.index') }}" class="link{% if g.page_type == 'data' or g.page_type == 'query' or g.page_type == 'classifications' %} active{% endif %}">{% trans %}Data{% endtrans %}</a>
@@ -114,6 +120,14 @@
 
 
   <script type="text/javascript">
+
+    $(document).ready(function() {
+        $('.tooltip').tooltipster({
+                contentAsHTML: true,
+                position: 'bottom'
+            });
+    });
+
 
     var crumbs = "{{crumbs|safe}}"
 

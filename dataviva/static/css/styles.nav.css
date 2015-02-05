@@ -437,3 +437,22 @@ a#search {
   display: block !important;
   margin-left: 6px !important;
 }
+
+
+
+
+
+.notice{
+  width: 20px;
+  padding-top: 2px;
+  background: #af1f24;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #FFF;
+  font-weight: bold;
+  height: 18px;
+  left: 236px;
+  top: -4px;
+  position: absolute;
+  cursor: pointer;
+}
