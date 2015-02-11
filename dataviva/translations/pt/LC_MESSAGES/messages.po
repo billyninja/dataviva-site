@@ -2185,3 +2185,5 @@ msgstr "um país"
 #~ msgid "Saiba Mais"
 #~ msgstr "See more"
 
+msgid "Updated data: <br/><li>Exports (2014)<li>Employees (2013)"
+msgstr "Dados atualizados:<br/><li>Exportações (2014)<li>Emprego formal (2013)"
