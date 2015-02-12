@@ -2126,7 +2126,7 @@ msgstr "clique aqui."
 
 #: dataviva/html/templates/site.html:19
 msgid "Learn More"
-msgstr "Ajuda"
+msgstr "Saiba mais"
 
 #: dataviva/html/templates/site.html:46
 msgid "Profile"
@@ -2187,3 +2187,27 @@ msgstr "um país"
 
 msgid "Updated data: <br/><li>Exports (2014)<li>Employees (2013)"
 msgstr "Dados atualizados:<br/><li>Exportações (2014)<li>Emprego formal (2013)"
+
+msgid "Credits"
+msgstr "Créditos"
+
+msgid "Partners"
+msgstr "Parceiros"
+
+msgid "Implementation:"
+msgstr "Realização:"
+
+msgid "Sponsor:"
+msgstr "Financiamento:"
+
+msgid "Provided by"
+msgstr "Realização"
+
+msgid "Sponsor"
+msgstr "Financiamento"
+
+msgid "Data source"
+msgstr "Fontes de dados"
+
+msgid "Partners"
+msgstr "Parceiros"

@@ -64,6 +64,10 @@ def contact():
     search_form = SearchForm()
     return render_template("about/ask/index.html", page = "ask", search_form = search_form)
 
+@mod.route('/credits/')
+def credits():
+    return render_template("about/credits.html", page = "credits")
+
 @mod.route('/ask/', methods=['GET', 'POST'])
 @mod.route('/ask/<user>/', methods=['GET', 'POST'])
 

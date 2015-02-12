@@ -149,7 +149,11 @@
       </a>
     
     {% endif %}
-    
+
+
+    <a class="{% if page == 'credits' %}decision{% else %}help{% endif %}" href="{{ url_for('about.credits') }}">
+      {% trans %}Credits{% endtrans %}
+    </a>
     
     
 </div>

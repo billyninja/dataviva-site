@@ -1,0 +1,51 @@
+<!-- extend from about base layout -->
+{% extends "templates/about.html" %}
+
+{% block title %}: {% trans %}Credits{% endtrans %}{% endblock %}
+
+{% block about_content %}
+<style>
+    #about_content > .lightbox{
+        background: #FFF;
+    }
+
+    .lightbox img{
+        margin: 0 !important;
+    }
+
+    .lightbox h2{
+        background: #d67ab0;
+        padding: 5px;
+        color: #FFF;
+        opacity:.9;
+    }
+</style>
+<h1>{% trans %}Credits{% endtrans %}</h1>
+<hr>
+<h2>{% trans %}Provided by{% endtrans %}</h2>
+<p>
+    <a href="http://www.mg.gov.br"><img src="/static/img/nav/logo_governo.jpg"></a>
+    <a href="http://www.datawheel.us"><img src="/static/img/nav/logo_datawheel.jpg"></a>
+    <a href="http://macroconnections.media.mit.edu"><img src="/static/img/nav/logo_mc.jpg"></a>
+</p>
+<br/><br/>
+<h2>{% trans %}Sponsor{% endtrans %}</h2>
+<br>
+<p>
+    <a href="http://fapemig.br"><img src="/static/img/nav/nova_logo_fapemig.jpg" width="150"></a>
+</p>
+<br/><br/>
+
+<h2>{% trans %}Data source{% endtrans %}</h2>
+<br/>
+<p>
+    <a href="http://www.mte.gov.br" style="float:left"><img src="/static/img/nav/mte.jpg" width="150"></a>
+    <a href="http://www.mdic.gov.br" style="float:left; margin-left:40px"><img src="/static/img/nav/mdic.jpg" width="200"></a>
+</p>
+<br/><br/><br/><br/>
+<h2>{% trans %}Partners{% endtrans %}</h2>
+<br/>
+<p>
+    <a href="http://www.fjp.mg.gov.br"><img src="/static/img/nav/logo_fjp.jpg"></a>
+</p>
+{% endblock %}
