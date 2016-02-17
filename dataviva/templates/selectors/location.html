@@ -33,6 +33,7 @@
                     placeholder="Busque pelo nome ou pelo No. IBGE" /><BR>
                 </div>
                 <div class="list-group list-stripped selector-list col-md-15">
+                    <div class="loading" ng-show="selector_model.loading"></div>
                     <div ng-repeat="loc in selector_model.regions.entries|filter:selector_model.regions.filter_string"
                         class="list-group-item col-md-15"
                         ng-if="loc.id != '0'"
@@ -58,6 +59,7 @@
                     placeholder="Busque pelo nome ou pelo No. IBGE" /><BR>
                 </div>
                 <div class="list-group list-stripped selector-list col-md-15">
+                    <div class="loading" ng-show="selector_model.loading"></div>
                     <div ng-repeat="loc in selector_model.states.entries | filter:selector_model.states.filter_string"
                         ng-if="loc.id_ibge"
                         ng-class="{'selected': loc.id == selector_model.selected_entry }"
@@ -86,6 +88,7 @@
                     placeholder="Busque pelo nome ou pelo No. IBGE"/>
                 </div><BR>
                 <div class="list-group list-stripped selector-list">
+                    <div class="loading" ng-show="selector_model.loading"></div>
                     <div ng-repeat="loc in selector_model.mesoregions.entries | filter:selector_model.mesoregions.filter_string"
                         ng-if="loc.id_ibge"
                         ng-class="{'selected': loc.id == selector_model.selected_entry }"
@@ -114,6 +117,7 @@
                     placeholder="Busque pelo nome ou pelo No. IBGE"/>
                 </div><BR>
                 <div class="list-group list-stripped selector-list">
+                    <div class="loading" ng-show="selector_model.loading"></div>
                     <div ng-repeat="loc in selector_model.mircroregions.entries | filter:selector_model.mircroregions.filter_string"
                         ng-if="loc.id_ibge"
                         ng-class="{'selected': loc.id == selector_model.selected_entry }"
@@ -144,6 +148,7 @@
                 </div><BR>
                 
                 <div class="list-group list-stripped selector-list">
+                    <div class="loading" ng-show="selector_model.loading"></div>
                     <div ng-repeat="loc in selector_model.municipalities.entries | filter:selector_model.municipalities.filter_string"
                         ng-if="loc.id_ibge"
                         ng-class="{'selected': loc.id == selector_model.selected_entry }"
