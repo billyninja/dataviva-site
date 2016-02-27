@@ -72,7 +72,9 @@
 								<p>Autor: Jose Eustaquio Barbosa<br>Data: 24 Nov 2015</p>
 							</div>
 						{% endfor %}
-												
+						
+						{% if paginator.pages %}
+						<!-- PAGINATOR -->												
 						<nav>
 							<ul class="pagination">
 								<li>
@@ -80,11 +82,9 @@
 										<span aria-hidden="true">«</span>
 									</a>
 								</li>
-								<li><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
+								{% for pag in paginator.pages %}
+								<li><a href="?limit={{ pag.limit }}&offset={{ pag.offset }}">{{ pag.n }}</a></li>
+								{% endfor %}
 								<li>
 									<a href="#" aria-label="Next">
 										<span aria-hidden="true">»</span>
@@ -92,6 +92,9 @@
 								</li>
 							</ul>
 						</nav>
+						<!-- PAGINATOR -->
+						{% endif %}
+
 					</div>
 				</div>
 			</div>

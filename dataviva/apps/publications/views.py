@@ -7,6 +7,18 @@ mod = Blueprint('publications', __name__,
                 url_prefix='/<lang_code>/publications')
 
 
+def _build_paginator(count, per_page):
+    import math
+    n_pages = math.ceil(float(count)/float(per_page))
+
+    return {
+        "pages": [{
+            "n": (p + 1),
+            "limit": per_page,
+            "offset": (per_page * p)} for p in range(int(n_pages))]
+    }
+
+
 @mod.url_value_preprocessor
 def pull_lang_code(endpoint, values):
     g.locale = values.pop('lang_code')
@@ -23,12 +35,15 @@ def index():
     # request.GET('page')
     # request.GET('query')
 
-    articles = [1, 2, 3, 4, 5]
+    articles = range(56)
     themes = [1, 2, 3, 4, 5]
+
+    paginator = _build_paginator(len(articles), per_page=20)
 
     return render_template(
         'publications/index.html',
         articles=articles,
+        paginator=paginator,
         themes=themes
     )
 
