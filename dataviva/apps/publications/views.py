@@ -19,4 +19,27 @@ def add_language_code(endpoint, values):
 
 @mod.route('/')
 def index():
-    return render_template('publications/index.html')
+
+    # request.GET('page')
+    # request.GET('query')
+
+    articles = [1, 2, 3, 4, 5]
+    themes = [1, 2, 3, 4, 5]
+
+    return render_template(
+        'publications/index.html',
+        articles=articles,
+        themes=themes
+    )
+
+
+@mod.route('/article')
+def article():
+
+    themes = [1, 2, 3, 4, 5]
+
+    return render_template(
+        'publications/article.html',
+        themes=themes,
+        article={},
+    )
