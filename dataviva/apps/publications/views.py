@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, g, jsonify, request, render_template
+from flask import Blueprint, render_template, g
 from dataviva.apps.general.views import get_locale
 
-mod = Blueprint('publications',
-                __name__,
+mod = Blueprint('publications', __name__,
+                template_folder='templates',
                 url_prefix='/<lang_code>/publications')
 
 
@@ -17,6 +17,6 @@ def add_language_code(endpoint, values):
     values.setdefault('lang_code', get_locale())
 
 
-@mod.route('/', methods=['GET'])
+@mod.route('/')
 def index():
-    return render_template("publications/index.html")
+    return render_template('publications/index.html')
