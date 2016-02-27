@@ -43,3 +43,14 @@ def article():
         themes=themes,
         article={},
     )
+
+
+@mod.route('/publish', methods=["GET"])
+def publish():
+
+    themes = [1, 2, 3, 4, 5]
+
+    return render_template(
+        'publications/publish.html',
+        themes=themes,
+    )

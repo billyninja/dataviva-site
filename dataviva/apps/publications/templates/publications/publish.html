@@ -1,0 +1,29 @@
+{% extends "publications/index.html" %}
+{% block title %}Academic publications about DataViva{% endblock %}
+{% block center_content %}
+	<div class="main-content col-xs-15 col-md-11">
+		<div class="institucional">
+			<h2>Estudos sobre o DataViva</h2>
+			<h3>Publique um estudo</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut nisi non erat facilisis vestibulum et at nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut eu sodales magna. Ut vel lectus tempus, dapibus mauris scelerisque, rutrum metus. Mauris congue quis nunc quis condimentum. Quisque at nibh blandit, dictum nisi lacinia, tempor leo. Nullam nisi massa, dapibus egestas augue vitae, ornare interdum erat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+			<form action="" class="form-dataviva">
+				<p>
+					<label for="field-titulo">Titulo</label>
+					<input id="field-titulo" type="text" class="form-control">
+				</p>
+				<p>
+					<label for="field-arquivo">
+						Formato<br>
+						<small>Aceitamos artigos em formato PDF.</small>
+					</label>
+					<input id="field-arquivo" type="file">
+				</p>
+				<p>
+					<label for="field-descricao">Descrição</label>
+					<textarea id="field-descricao" rows="5" class="form-control"></textarea>
+				</p>
+				<button type="button" class="btn btn-default btn-dataviva pull-right">Enviar</button>
+			</form>
+		</div>
+	</div>
+{% endblock center_content %}
